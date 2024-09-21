@@ -1,0 +1,24 @@
+import = ["~/.alacritty/solarized_dark.toml"]
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[font]
+size = 14
+
+[font.normal]
+family = "MesloLGM Nerd Font Mono"
+style = "Regular"
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[selection]
+save_to_clipboard = true
+
+[shell]
+program = "tmux"
+
+[window]
+opacity = 1
