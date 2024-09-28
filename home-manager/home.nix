@@ -10,6 +10,7 @@
     # ./nvim.nix
     ./packages.nix
     ./zsh.nix
+    ./neovim.nix
     ./vscode/vscode.nix
   ];
 
@@ -63,7 +64,6 @@
   # Programs
   programs.home-manager.enable = true;
   programs.git.enable = true;
-  programs.neovim.enable = true;
 
 
   # Environment variables

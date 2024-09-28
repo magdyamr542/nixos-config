@@ -11,7 +11,6 @@ in
 
   # User packages
   home.packages = with pkgs; [
-	#TODO manage neovim
 	zsh-autosuggestions
 	zsh-completions
 	zsh-powerlevel10k
@@ -20,6 +19,8 @@ in
 	tmux
     alacritty
     arandr
+	unzip
+	wget
 	bat
 	vscode
 	diffutils
@@ -35,12 +36,13 @@ in
 	vagrant
 	virtualbox
 	vokoscreen-ng
+	gcc
+	python3
 	go
 	gopls
 	gotools
 	delve
 	autojump
-	vim
 	delta
 	rofi
 	feh
@@ -51,6 +53,7 @@ in
 	libnotify
 	nerdfonts
 	kustomize
+	nix-prefetch-git
 	customGoPrograms.ssh-tunnel-manager
 	customGoPrograms.browser-tab-groups
 	customGoPrograms.project-root
