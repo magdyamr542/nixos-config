@@ -1,2 +1,4 @@
 .vagrant
 nixos/users/amr/password.txt
+home-manager/users/amr/ssh_keys/*
+!home-manager/users/amr/ssh_keys/*.pub

@@ -42,6 +42,12 @@
     # project root
     ".proot/project-root.sh".source = ./custom-programs/project-root.sh;
 
+    # ssh
+    ".ssh" = {
+      recursive = true;
+      source = ./users/amr/ssh_keys;
+    };
+
     # i3
     ".wallpaper.png".source = ./static/wallpaper.png; 
     ".config/i3/config".source = ./dotfiles/i3_config; 
@@ -119,9 +125,22 @@
     };
   };
 
+  # Garbage collection
   nix.gc = {
     automatic = true;
     frequency = "weekly";
+  };
+
+  # SSH
+  programs.ssh = {
+    enable = true;
+    addKeysToAgent = "yes";
+    matchBlocks = {
+      github = {
+        host = "github.com";
+        identityFile = "~/.ssh/github";
+      };
+    };
   };
 
 

@@ -1,5 +1,8 @@
 ## My NIXOS config
 
-To start, create `./nixos/users/amr/password.txt` and put the login password there.
-Then do `nixos-rebuild switch --flake /etc/nixos#amr` followed by `home-manager switch --flake /etc/nixos#amr`
-The OS should be ready to use after that.
+To start:
+
+1. create `./nixos/users/amr/password.txt` and put the login password there.
+2. create `./home-manager/users/amr/ssh_keys/github` and put the github private key there (found in bitwarden).
+3. `nixos-rebuild switch --flake /etc/nixos#amr`
+4. `home-manager switch --flake /etc/nixos#amr`
