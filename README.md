@@ -5,7 +5,9 @@ To start:
 1. create `./nixos/users/amr/password.txt` and put the login password there.
    - Note: vim adds new lines, make sure to remove those
    - https://stackoverflow.com/questions/1050640/how-to-stop-vim-from-adding-a-newline-at-end-of-file
-2. create `./home-manager/users/amr/ssh_keys/github` and put the github private key there (found in bitwarden).
+2. sync ssh keys
+   - create `./home-manager/users/amr/ssh_keys/github` and put the private key there (found in bitwarden).
+   - create `./home-manager/users/amr/ssh_keys/gitlab_tu_dortmund` and put the private key there (found in bitwarden).
 3. `sudo nixos-rebuild switch --flake /etc/nixos#amr`
 4. `nix-shell -p home-manager`
 5. `home-manager switch --flake /etc/nixos#amr`

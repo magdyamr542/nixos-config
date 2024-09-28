@@ -140,6 +140,11 @@
         host = "github.com";
         identityFile = "~/.ssh/github";
       };
+
+      gitlab-tu-dortmund = {
+        host = "ls14-scm.cs.tu-dortmund.de";
+        identityFile = "~/.ssh/gitlab_tu_dortmund";
+      };
     };
   };
 
