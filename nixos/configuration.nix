@@ -81,8 +81,13 @@
   };
 
 
-  services.libinput.touchpad.naturalScrolling = true;
-  services.libinput.mouse.naturalScrolling = true;
+  services.libinput = {
+    enable = true;
+    mouse.naturalScrolling = true;
+    touchpad.naturalScrolling = true;
+    mouse.accelSpeed = "0.8";
+    touchpad.accelSpeed = "0.8";
+  };
 
   users.groups = {
     amr = {
