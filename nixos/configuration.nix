@@ -60,6 +60,7 @@
   programs.nm-applet.enable = true;
 
   sound.enable = true;
+  hardware.pulseaudio.enable = true;
 
   users.defaultUserShell = pkgs.zsh;
   users.users = {
@@ -67,7 +68,7 @@
       description     = "My user";
       name            = "amr";
       group           = "amr";
-      extraGroups     = ["wheel" "docker" "networkmanager"];
+      extraGroups     = ["wheel" "docker" "networkmanager" "audio"];
       password        = builtins.readFile(./users/amr/password.txt);
       home            = "/home/amr";
       createHome      = true;
@@ -78,6 +79,10 @@
       isNormalUser = true;
     };
   };
+
+
+  services.libinput.touchpad.naturalScrolling = true;
+  services.libinput.mouse.naturalScrolling = true;
 
   users.groups = {
     amr = {
