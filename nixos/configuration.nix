@@ -13,6 +13,12 @@
     ./system-packages.nix
   ];
 
+
+  # Bootloader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+
   nixpkgs = {
     # You can add overlays here
     overlays = [
@@ -53,9 +59,9 @@
   };
   programs.nm-applet.enable = true;
 
+  sound.enable = true;
 
-
-	users.defaultUserShell = pkgs.zsh;
+  users.defaultUserShell = pkgs.zsh;
   users.users = {
     amr = {
       description     = "My user";
@@ -91,7 +97,6 @@
   services.xserver = {
     enable = true;
     xkb.layout = "us";
-    videoDrivers = [ "vmware" ];
 
     windowManager.i3 = {
       enable = true;
@@ -100,7 +105,6 @@
       ];
     };
   };
-
 
   services.displayManager = {
       enable = true;
@@ -120,7 +124,6 @@
   # Docker
   virtualisation.docker.enable = true;
 
-
   time.timeZone = "Europe/Berlin";
 
   i18n = {
@@ -138,9 +141,6 @@
         LC_CTYPE="en_US.utf8"; # required by dmenu don't change this
       };
     };
-
-
-
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.05";
