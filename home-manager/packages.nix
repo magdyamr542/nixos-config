@@ -57,6 +57,7 @@ in
 	customGoPrograms.ssh-tunnel-manager
 	customGoPrograms.browser-tab-groups
 	customGoPrograms.project-root
+    nodejs
 	(pkgs.buildEnv { name = "my-bash-scripts"; paths = [ ./scripts ]; })
   ];
 
