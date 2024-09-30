@@ -16,12 +16,15 @@
 		shellAliases = {
 			ll = "ls -l";
 			gcm = "git commit -m";
+			gsh = "git show HEAD";
+			nix-shell = "nix-shell --run zsh";
 			update = "sudo nixos-rebuild switch --flake /etc/nixos#amr";
 			updatehome = "home-manager switch --flake /etc/nixos#amr";
 			deletegarbage = "nix-collect-garbage --delete-old";
 			tm = "ssh-tunnel-manager";
 			br = "browser-tab-groups";
 			t = "tree";
+			open = "xdg-open";
 		};
 
 		oh-my-zsh = {

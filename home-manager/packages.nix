@@ -58,6 +58,7 @@ in
 	customGoPrograms.browser-tab-groups
 	customGoPrograms.project-root
     nodejs
+    imagemagick
 	(pkgs.buildEnv { name = "my-bash-scripts"; paths = [ ./scripts ]; })
   ];
 
