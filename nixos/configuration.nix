@@ -83,7 +83,7 @@
 
   services.libinput = {
     enable = true;
-    mouse.naturalScrolling = true;
+    mouse.naturalScrolling = false;
     touchpad.naturalScrolling = true;
     mouse.accelSpeed = "0.8";
     touchpad.accelSpeed = "0.8";
