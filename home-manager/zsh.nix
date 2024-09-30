@@ -14,17 +14,24 @@
 		syntaxHighlighting.enable = true;
 
 		shellAliases = {
-			ll = "ls -l";
+			# git
 			gcm = "git commit -m";
 			gsh = "git show HEAD";
+			#nix
 			nix-shell = "nix-shell --run zsh";
 			update = "sudo nixos-rebuild switch --flake /etc/nixos#amr";
 			updatehome = "home-manager switch --flake /etc/nixos#amr";
 			deletegarbage = "nix-collect-garbage --delete-old";
+			# general
+			ll = "ls -l";
 			tm = "ssh-tunnel-manager";
 			br = "browser-tab-groups";
 			t = "tree";
 			open = "xdg-open";
+			# keyboard layout
+			en = "setxkbmap -v us";
+			de = "setxkbmap -v de";
+			ar = "setxkbmap -v ara";
 		};
 
 		oh-my-zsh = {

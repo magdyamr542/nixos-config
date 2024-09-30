@@ -106,8 +106,7 @@
 
   services.xserver = {
     enable = true;
-    xkb.layout = "us";
-
+    xkb.layout = "us,de,ara";
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
@@ -119,10 +118,6 @@
   services.displayManager = {
       enable = true;
       defaultSession = "none+i3";
-      autoLogin = {
-        enable = true;
-        user = "amr";
-      };
   };
 
   programs.zsh.enable = true;
