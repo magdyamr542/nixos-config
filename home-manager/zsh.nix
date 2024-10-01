@@ -17,6 +17,7 @@
 			# git
 			gcm = "git commit -m";
 			gsh = "git show HEAD";
+			gpl = "git pull";
 			#nix
 			nix-shell = "nix-shell --run zsh";
 			update = "sudo nixos-rebuild switch --flake /etc/nixos#amr";
