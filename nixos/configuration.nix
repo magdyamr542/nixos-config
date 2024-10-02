@@ -65,7 +65,7 @@
   users.defaultUserShell = pkgs.zsh;
   users.users = {
     amr = {
-      description     = "My user";
+      description     = "User amr";
       name            = "amr";
       group           = "amr";
       extraGroups     = ["wheel" "docker" "networkmanager" "audio"];
