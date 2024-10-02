@@ -85,8 +85,8 @@
     enable = true;
     mouse.naturalScrolling = false;
     touchpad.naturalScrolling = true;
-    mouse.accelSpeed = "0.8";
-    touchpad.accelSpeed = "0.8";
+    mouse.accelSpeed = "0.6";
+    touchpad.accelSpeed = "0.6";
   };
 
   users.groups = {
@@ -106,6 +106,7 @@
 
   services.xserver = {
     enable = true;
+    exportConfiguration = true;
     xkb.layout = "us,de,ara";
     windowManager.i3 = {
       enable = true;
