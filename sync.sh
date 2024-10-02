@@ -1,1 +1,1 @@
-rsync -auv --exclude=.git --exclude=.gitignore --exclude=Vagrantfile /home/amr/nixos-config/ /etc/nixos
+rsync -auv --exclude=.git --exclude=.gitignore --exclude=Vagrantfile $(pwd)/ /etc/nixos
