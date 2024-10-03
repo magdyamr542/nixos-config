@@ -59,6 +59,7 @@ in
 	customGoPrograms.project-root
     nodejs
     imagemagick
+    yq
 	(pkgs.buildEnv { name = "my-bash-scripts"; paths = [ ./scripts ]; })
   ];
 
