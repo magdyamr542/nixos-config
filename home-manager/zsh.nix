@@ -22,7 +22,7 @@
 			nix-shell = "nix-shell --run zsh";
 			update = "sudo nixos-rebuild switch --flake /etc/nixos#amr";
 			updatehome = "home-manager switch --flake /etc/nixos#amr";
-			deletegarbage = "nix-collect-garbage --delete-old";
+			deletegarbage = "sudo nix-collect-garbage --delete-old";
 			# general
 			ll = "ls -l";
 			tm = "ssh-tunnel-manager";
