@@ -148,11 +148,7 @@
     };
   };
 
-  # Cusror
-  # home.pointerCursor = {
-  #   x11.enable = true;
-  #   gtk.enable = true;
-  # };
+  news.display = "silent";
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
