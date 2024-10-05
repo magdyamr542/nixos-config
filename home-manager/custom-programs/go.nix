@@ -25,7 +25,6 @@
     };
   };
 
-
   browser-tab-groups = buildGoModule rec {
     pname = "browser-tab-groups";
     version = "1.0.0";
@@ -45,7 +44,24 @@
     };
   };
 
+  clrd = buildGoModule rec {
+    pname = "clrd";
+    version = "1.0.0";
 
+    src = fetchFromGitHub {
+      owner = "magdyamr542";
+      repo = "clrd";
+      rev = "c62f2bea1b3d2c3d965975c6bfbeb2ea6938539f";
+      hash = "sha256-cX1PT42Tj5rLSYetH192tJuVxWYCPRy+1OSo3iuuwmo=";
+    };
+
+	  vendorHash = null;
+
+    meta = {
+      description = "My go command clearing the Downloads directory ";
+      homepage = "https://github.com/magdyamr542/clrd";
+    };
+  };
 
   project-root = buildGoModule rec {
     pname = "project-root";
@@ -65,5 +81,4 @@
       homepage = "https://github.com/magdyamr542/project-root";
     };
   };
-
 }

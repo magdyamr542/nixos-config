@@ -57,6 +57,7 @@ in
 	customGoPrograms.ssh-tunnel-manager
 	customGoPrograms.browser-tab-groups
 	customGoPrograms.project-root
+	customGoPrograms.clrd
     nodejs
     imagemagick
     yq
