@@ -4,7 +4,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
@@ -15,8 +16,7 @@
   ];
 
   nixpkgs = {
-    overlays = [
-    ];
+    overlays = [ ];
     config = {
       allowUnfree = true;
       # Workaround for https://github.com/nix-community/home-manager/issues/2942
@@ -50,21 +50,19 @@
     };
 
     # i3
-    ".wallpaper.png".source = ./static/wallpaper.png; 
-    ".config/i3/config".source = ./dotfiles/i3_config; 
-    ".config/rofi/config.rasi".source = ./static/rofi/config.rasi; 
-    ".config/rofi/dracula.rasi".source = ./static/rofi/dracula.rasi; 
-    ".config/rofi/nord.rasi".source = ./static/rofi/nord.rasi; 
+    ".wallpaper.png".source = ./static/wallpaper.png;
+    ".config/i3/config".source = ./dotfiles/i3_config;
+    ".config/rofi/config.rasi".source = ./static/rofi/config.rasi;
+    ".config/rofi/dracula.rasi".source = ./static/rofi/dracula.rasi;
+    ".config/rofi/nord.rasi".source = ./static/rofi/nord.rasi;
     ".scripts/i3/screenshot.sh".source = ./static/scripts/i3/screenshot.sh;
     ".scripts/i3/update-brithness.sh".source = ./static/scripts/i3/update-brithness.sh;
     ".scripts/i3/update-volume.sh".source = ./static/scripts/i3/update-volume.sh;
   };
 
-
   # Programs
   programs.home-manager.enable = true;
   programs.git.enable = true;
-
 
   # Environment variables
   home.sessionVariables = {
@@ -81,7 +79,6 @@
 
     AWS_PAGER = "";
   };
-
 
   # Notification system
   services.dunst = {
@@ -117,7 +114,7 @@
 
   # Font
   fonts.fontconfig = {
-	  enable = true;
+    enable = true;
     defaultFonts = {
       serif = [ "MesloLGM Nerd Font Mono" ];
       sansSerif = [ "MesloLGM Nerd Font Mono" ];

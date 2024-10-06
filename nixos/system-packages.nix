@@ -1,7 +1,5 @@
+{ pkgs, ... }:
 {
-  pkgs,
-  ...
-}: {
   # System packages
   environment.systemPackages = with pkgs; [
     findutils

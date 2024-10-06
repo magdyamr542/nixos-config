@@ -1,4 +1,4 @@
-{  
+{
   lib,
   pkgs,
   buildGoModule,
@@ -17,7 +17,7 @@
       hash = "sha256-jN+5m2zqVNjk96JmKynBRSo0hvjmE5OE+QglR+Vkon4=";
     };
 
-	  vendorHash = "sha256-9x+YDgUd0jdcMAbKr9HA3fATAh3qkvbQgIMVtIkK850=";
+    vendorHash = "sha256-9x+YDgUd0jdcMAbKr9HA3fATAh3qkvbQgIMVtIkK850=";
 
     meta = {
       description = "My go command managing ssh tunnels";
@@ -36,7 +36,7 @@
       hash = "sha256-9i7Dd+f7rtb9XidCzINU64ct7vS/7KTewJvF8kRDPLk=";
     };
 
-	  vendorHash = "sha256-injNtarzeblUpQ/mq8VosQJuYU+9w65ttvdkgCKLGYA=";
+    vendorHash = "sha256-injNtarzeblUpQ/mq8VosQJuYU+9w65ttvdkgCKLGYA=";
 
     meta = {
       description = "My go command managing tab groups";
@@ -55,7 +55,7 @@
       hash = "sha256-cX1PT42Tj5rLSYetH192tJuVxWYCPRy+1OSo3iuuwmo=";
     };
 
-	  vendorHash = null;
+    vendorHash = null;
 
     meta = {
       description = "My go command clearing the Downloads directory ";
@@ -74,7 +74,7 @@
       hash = "sha256-eFgDKIfNnYcZKbyQarw/Tp2gs/cMddtHVBMxZYiXbZg=";
     };
 
-	  vendorHash = "sha256-i59HUK9KRw06Rk50WPN0WKllpAd9T5uASKN7jjSTxdU=";
+    vendorHash = "sha256-i59HUK9KRw06Rk50WPN0WKllpAd9T5uASKN7jjSTxdU=";
 
     meta = {
       description = "My go command managing tab groups";
