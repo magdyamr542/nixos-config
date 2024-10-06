@@ -57,6 +57,7 @@ in
     imagemagick
     yq
     nixfmt-rfc-style
+    maim
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];

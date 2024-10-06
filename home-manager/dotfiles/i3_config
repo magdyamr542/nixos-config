@@ -19,11 +19,10 @@ bindsym $mod+n exec i3-input -F 'rename workspace to "%s"' -P 'New name for this
 
 
 # take a screenshot of a screen region
-bindsym --release Shift+Print exec  $HOME/.scripts/i3/screenshot.sh -s ~/Pictures/Screenshots/ && notify-send -t 1500 Screenshot "Success "
+bindsym --release Shift+Print exec $HOME/.scripts/i3/screenshot.sh ~/Pictures/Screenshots/ -s && notify-send -t 1500 "Screenshot taken"
 
 # take a screenshot of the full window
-bindsym --release Print exec $HOME/.scripts/i3/screenshot.sh  ~/Pictures/Screenshots/ && notify-send -t 1500 Screenshot "Success "
-
+bindsym --release Print exec $HOME/.scripts/i3/screenshot.sh ~/Pictures/Screenshots/ && notify-send -t 1500 "Screenshot taken"
 
 # Your preferred application launcher
 #set $menu dmenu_run
