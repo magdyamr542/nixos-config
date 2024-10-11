@@ -145,6 +145,15 @@
     };
   };
 
+  # File associations
+  xdg.mime.enable = true;
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "application/pdf" = [ "org.gnome.Evince.desktop" ];
+    };
+  };
+
   news.display = "silent";
 
   # Nicely reload system units when changing configs

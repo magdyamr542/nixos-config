@@ -58,6 +58,8 @@ in
     yq
     nixfmt-rfc-style
     maim
+    evince
+    file
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
