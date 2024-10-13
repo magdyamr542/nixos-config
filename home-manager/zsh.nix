@@ -18,21 +18,24 @@
       gcm = "git commit -m";
       gsh = "git show HEAD";
       gpl = "git pull";
+
       #nix
       nix-shell = "nix-shell --run zsh";
       update = "sudo nixos-rebuild switch --flake /etc/nixos#amr";
       updatehome = "home-manager switch --flake /etc/nixos#amr";
       deletegarbage = "sudo nix-collect-garbage --delete-old";
+
       # general
       ll = "ls -l";
       tm = "ssh-tunnel-manager";
       br = "browser-tab-groups";
       t = "tree";
       open = "xdg-open";
+      o = "xdg-open";
       # keyboard layout
-      en = "setxkbmap -v us";
-      de = "setxkbmap -v de";
-      ar = "setxkbmap -v ara";
+      en = "setxkbmap us";
+      de = "setxkbmap de";
+      ar = "setxkbmap ara";
     };
 
     oh-my-zsh = {
