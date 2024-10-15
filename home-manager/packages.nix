@@ -60,6 +60,7 @@ in
     maim
     evince
     file
+    vlc
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
