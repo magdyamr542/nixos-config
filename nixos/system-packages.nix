@@ -19,5 +19,6 @@
     tree
     bumblebee-status
     xsel
+    bc
   ];
 }
