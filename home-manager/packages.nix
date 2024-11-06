@@ -61,6 +61,7 @@ in
     evince
     file
     vlc
+    gnumeric
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
