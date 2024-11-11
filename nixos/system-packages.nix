@@ -20,5 +20,6 @@
     bumblebee-status
     xsel
     bc
+    zip
   ];
 }
