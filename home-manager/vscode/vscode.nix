@@ -76,6 +76,7 @@ in
         extensions.bruno-api-client.bruno
         extensions.amrmetwally.vim-find-highlight
         extensions.amrmetwally.add-arround
+        extensions.yy0931.go-to-next-error
       ];
 
     userSettings = {
@@ -267,6 +268,13 @@ in
               args = [ ];
             }
           ];
+        }
+        {
+          before = [
+            "<leader>"
+            "n"
+          ];
+          commands = ["go-to-next-error.nextInFiles.warning"];
         }
         {
           before = [

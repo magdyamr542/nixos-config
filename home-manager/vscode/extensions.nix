@@ -647,6 +647,12 @@ merge
             version = "1.0.5";
             sha256 = "074m3wd6jv8c9lgfb656c53bfds4wlkmg1ynggwlp8d4bhjrwdzn";
           };
+          "yy0931"."go-to-next-error" = vscode-utils.extensionFromVscodeMarketplace {
+            name = "go-to-next-error";
+            publisher = "yy0931";
+            version = "1.0.7";
+            sha256 = "sha256-LIa+ka5LWPLWCGVStdLxvmOzJvWBqW1kTa72rjuDTUg=";
+          };
           "amrmetwally"."vim-find-highlight" = vscode-utils.extensionFromVscodeMarketplace {
             name = "vim-find-highlight";
             publisher = "amrmetwally";
