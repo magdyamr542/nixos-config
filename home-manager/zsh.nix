@@ -16,7 +16,7 @@
     shellAliases = {
       # git
       gcm = "git commit -m";
-      gsh = "git show HEAD";
+      gsh = "git show";
       gpl = "git pull";
 
       #nix
