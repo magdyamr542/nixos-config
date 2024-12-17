@@ -62,6 +62,10 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  hardware.bluetooth.enable = true; 
+  hardware.bluetooth.powerOnBoot = true; 
+  services.blueman.enable = true;
+
   users.defaultUserShell = pkgs.zsh;
   users.users = {
     amr = {
