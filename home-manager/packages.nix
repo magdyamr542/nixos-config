@@ -62,6 +62,7 @@ in
     file
     vlc
     gnumeric
+    hypnotix
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
