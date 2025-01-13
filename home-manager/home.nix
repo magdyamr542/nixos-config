@@ -143,7 +143,7 @@
   # Garbage collection
   nix.gc = {
     automatic = true;
-    frequency = "weekly";
+    frequency = "monthly";
   };
 
   # SSH
