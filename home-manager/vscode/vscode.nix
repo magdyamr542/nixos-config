@@ -395,6 +395,10 @@ in
       "[nix]" = {
         "editor.defaultFormatter" = "jnoortheen.nix-ide";
       };
+      "[rust]" = {
+        "editor.defaultFormatter" = "rust-lang.rust-analyzer";
+      };
+      "rust-analyzer.check.command" =  "clippy";
     };
 
     keybindings = [

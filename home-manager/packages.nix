@@ -63,6 +63,9 @@ in
     vlc
     gnumeric
     hypnotix
+    rustc
+    cargo
+    rustfmt
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
