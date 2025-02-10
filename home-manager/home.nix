@@ -59,6 +59,11 @@
     ".scripts/i3/update-volume.sh".source = ./static/scripts/i3/update-volume.sh;
   };
 
+  # Extend path
+  home.sessionPath =   [
+      "${config.home.homeDirectory}/.cargo/bin"
+  ];
+
   # Programs
   programs.home-manager.enable = true;
   programs.git.enable = true;
