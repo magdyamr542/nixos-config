@@ -167,6 +167,11 @@
         host = "ls14-scm.cs.tu-dortmund.de";
         identityFile = "~/.ssh/gitlab_tu_dortmund";
       };
+
+      gitlab-gitos = {
+        host = "devhub.peq1.com";
+        identityFile = "~/.ssh/gitos";
+      };
     };
   };
 
