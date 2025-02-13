@@ -67,6 +67,7 @@ in
     cargo
     rustfmt
     teams-for-linux
+    lsof
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
