@@ -66,6 +66,7 @@ in
     rustc
     cargo
     rustfmt
+    teams-for-linux
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
