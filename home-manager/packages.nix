@@ -63,9 +63,6 @@ in
     vlc
     gnumeric
     hypnotix
-    rustc
-    cargo
-    rustfmt
     teams-for-linux
     lsof
     (pkgs.buildEnv {

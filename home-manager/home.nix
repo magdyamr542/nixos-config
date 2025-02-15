@@ -61,7 +61,6 @@
 
   # Extend path
   home.sessionPath =   [
-      "${config.home.homeDirectory}/.cargo/bin"
   ];
 
   # Programs
@@ -82,8 +81,6 @@
     DISABLE_MAGIC_FUNCTIONS = "true";
 
     AWS_PAGER = "";
-
-    RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
   };
 
   # Notification system
