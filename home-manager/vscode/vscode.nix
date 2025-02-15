@@ -397,6 +397,7 @@ in
       };
       "[rust]" = {
         "editor.defaultFormatter" = "rust-lang.rust-analyzer";
+        "editor.inlayHints.enabled" = "offUnlessPressed";
       };
       "rust-analyzer.check.command" =  "clippy";
     };
