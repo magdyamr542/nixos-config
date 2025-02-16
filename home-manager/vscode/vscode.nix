@@ -279,6 +279,20 @@ in
         {
           before = [
             "<leader>"
+            "i"
+          ];
+          commands = ["editor.action.inlineSuggest.trigger"];
+        }
+        {
+          before = [
+            "<leader>"
+            "tab"
+          ];
+          commands = ["editor.action.inlineSuggest.commit"];
+        }
+        {
+          before = [
+            "<leader>"
             "f"
           ];
           commands = [ "search.action.focusNextSearchResult" ];
