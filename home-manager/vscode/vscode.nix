@@ -55,6 +55,7 @@ in
         pkgs.vscode-extensions.irongeek.vscode-env
         pkgs.vscode-extensions.stkb.rewrap
         pkgs.vscode-extensions.bbenoist.nix
+        pkgs.vscode-extensions.zxh404.vscode-proto3
       ]
       ++ [
         extensions.ms-vscode.remote-explorer
