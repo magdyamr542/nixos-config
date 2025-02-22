@@ -346,6 +346,9 @@ in
       "[go]" = {
         "editor.defaultFormatter" = "golang.go";
       };
+      "[toml]" = {
+        "editor.defaultFormatter" = "tamasfe.even-better-toml";
+      };
       "editor.formatOnSave" = true;
       "editor.defaultFormatter" = "esbenp.prettier-vscode";
       "[json]" = {
