@@ -17,7 +17,6 @@ in
     unzip
     wget
     bat
-    vscode
     diffutils
     fd
     google-chrome

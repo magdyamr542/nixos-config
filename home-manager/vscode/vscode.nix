@@ -56,6 +56,7 @@ in
         pkgs.vscode-extensions.stkb.rewrap
         pkgs.vscode-extensions.bbenoist.nix
         pkgs.vscode-extensions.zxh404.vscode-proto3
+        pkgs.vscode-extensions.rust-lang.rust-analyzer
       ]
       ++ [
         extensions.ms-vscode.remote-explorer
@@ -189,35 +190,14 @@ in
         }
         {
           before = [
-            "<C-b>"
-            "c"
-          ];
-          commands = [ "bookmarks.clearFromAllFiles" ];
-        }
-        {
-          before = [
-            "<C-b>"
-            "n"
-          ];
-          commands = [ "bookmarks.jumpToNext" ];
-        }
-        {
-          before = [
-            "<C-b>"
-            "t"
-          ];
-          commands = [ "bookmarks.toggle" ];
-        }
-        {
-          before = [
-            "<C-b>"
-            "m"
+            "<leader>"
+            "b"
           ];
           commands = [ "bookmarks.toggleLabeled" ];
         }
         {
           before = [
-            "<C-b>"
+            "<leader>"
             "l"
           ];
           commands = [ "bookmarks.listFromAllFiles" ];
