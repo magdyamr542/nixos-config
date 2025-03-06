@@ -329,6 +329,10 @@ in
       "[toml]" = {
         "editor.defaultFormatter" = "tamasfe.even-better-toml";
       };
+      "[latex]" = {
+        "editor.defaultFormatter" = "James-Yu.latex-workshop";
+      };
+      "latex-workshop.formatting.latex" = "latexindent";
       "editor.formatOnSave" = true;
       "editor.defaultFormatter" = "esbenp.prettier-vscode";
       "[json]" = {
