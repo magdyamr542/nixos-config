@@ -81,6 +81,8 @@
     DISABLE_MAGIC_FUNCTIONS = "true";
 
     AWS_PAGER = "";
+
+    LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
   };
 
   # Notification system
