@@ -64,6 +64,7 @@ in
     hypnotix
     teams-for-linux
     lsof
+    dbeaver-bin
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
