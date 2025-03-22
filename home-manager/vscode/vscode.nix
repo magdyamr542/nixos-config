@@ -329,6 +329,9 @@ in
       "[toml]" = {
         "editor.defaultFormatter" = "tamasfe.even-better-toml";
       };
+      "[sql]" = {
+        "editor.defaultFormatter" = "inferrinizzard.prettier-sql-vscode";
+      };
       "[latex]" = {
         "editor.defaultFormatter" = "James-Yu.latex-workshop";
       };
