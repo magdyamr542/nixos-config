@@ -31,6 +31,7 @@
   # Dotfiles
   home.file = {
     ".p10k.zsh".source = ./dotfiles/.p10k.zsh;
+    ".vrapperrc".source = ./dotfiles/.vrapperrc;
     ".gitconfig".source = ./dotfiles/.gitconfig;
     ".alacritty/alacritty.toml".source = ./dotfiles/alacritty.toml;
     ".alacritty/solarized_dark.toml".source = ./dotfiles/solarized_dark.toml;
