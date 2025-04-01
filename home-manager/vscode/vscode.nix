@@ -317,6 +317,9 @@ in
       "explorer.confirmDelete" = false;
       "editor.lineNumbers" = "relative";
       "editor.bracketPairColorization.enabled" = false;
+      "[proto3]" = {
+        "editor.defaultFormatter" = "zxh404.vscode-proto3";
+      };
       "[html]" = {
         "editor.defaultFormatter" = "esbenp.prettier-vscode";
       };
