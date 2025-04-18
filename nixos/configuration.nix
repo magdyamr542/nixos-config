@@ -77,6 +77,7 @@
         "docker"
         "networkmanager"
         "audio"
+        "vboxusers"
       ];
       password = builtins.readFile (./users/amr/password.txt);
       home = "/home/amr";
@@ -143,6 +144,10 @@
   # Docker
   virtualisation.docker.enable = true;
 
+  # Virtualbox
+  users.extraGroups.vboxusers.members = [ "amr" ];
+  virtualisation.virtualbox.host.enable = true;
+
   time.timeZone = "Europe/Berlin";
 
   i18n = {
@@ -163,4 +168,11 @@
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.05";
+
+  # Virtual box networking config to work with Vagrant as described here:
+  # https://github.com/techiescamp/vagrant-kubeadm-kubernetes
+  environment.etc = {
+    "vbox/networks.conf".text = "* 0.0.0.0/0 ::/0";
+  };
+
 }

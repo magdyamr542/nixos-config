@@ -28,7 +28,6 @@ in
     slack
     zoom-us
     vagrant
-    virtualbox
     vokoscreen-ng
     gcc
     python3
