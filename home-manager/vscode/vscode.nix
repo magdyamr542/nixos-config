@@ -57,6 +57,7 @@ in
         pkgs.vscode-extensions.bbenoist.nix
         pkgs.vscode-extensions.zxh404.vscode-proto3
         pkgs.vscode-extensions.rust-lang.rust-analyzer
+        pkgs.vscode-extensions.bbenoist.nix
       ]
       ++ [
         extensions.ms-vscode.remote-explorer
@@ -405,6 +406,7 @@ in
         "editor.inlayHints.enabled" = "offUnlessPressed";
       };
       "rust-analyzer.check.command" =  "clippy";
+      "nix.formatterPath" = "nixfmt";
     };
 
     keybindings = [
