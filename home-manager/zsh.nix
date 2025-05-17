@@ -47,7 +47,6 @@
         "autojump"
         "colored-man-pages"
         "history-substring-search"
-        "fd"
         "kubectl"
       ];
     };

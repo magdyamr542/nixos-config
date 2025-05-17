@@ -10,8 +10,8 @@ let
   nvimConfigDir = pkgs.fetchFromGitHub {
     owner = "magdyamr542";
     repo = "nvim";
-    rev = "0992f51cb23d6b270e530755057ae81b966fc3cf";
-    hash = "sha256-I34lxqBoJpfUJwOpWFO16u6VvS/90X4p5a64BRk0yPI=";
+    rev = "afbe50e6aec3a45ec7494ef653a4695645310963";
+    hash = "sha256-EkomSBxPX3B9aTfeq6oiyPGxU6WWIrQVOun+uwCdgUw=";
   };
 in
 {
