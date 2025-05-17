@@ -181,6 +181,8 @@
     enable = true;
     defaultApplications = {
       "application/pdf" = [ "org.gnome.Evince.desktop" ];
+      "image/png" = [ "feh.desktop" ];
+      "image/jpeg" = [ "feh.desktop" ];
     };
   };
 

@@ -61,7 +61,6 @@ in
     vlc
     gnumeric
     hypnotix
-    teams-for-linux
     lsof
     dbeaver-bin
     (pkgs.buildEnv {
