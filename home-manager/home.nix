@@ -183,6 +183,8 @@
       "application/pdf" = [ "org.gnome.Evince.desktop" ];
       "image/png" = [ "feh.desktop" ];
       "image/jpeg" = [ "feh.desktop" ];
+      "x-scheme-handler/http" = [ "google-chrome-stable.desktop"  "google-chrome.desktop" ];
+      "x-scheme-handler/https" = [ "google-chrome-stable.desktop"  "google-chrome.desktop" ];
     };
   };
 
