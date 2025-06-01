@@ -78,6 +78,7 @@ in
         extensions.bbenoist.vagrant
         extensions.bruno-api-client.bruno
         extensions.amrmetwally.vim-find-highlight
+        extensions.amrmetwally.rust-mod-opener
         extensions.amrmetwally.add-arround
         extensions.yy0931.go-to-next-error
       ];
