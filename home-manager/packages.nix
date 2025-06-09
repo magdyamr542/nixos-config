@@ -65,6 +65,7 @@ in
     evince
     file
     vlc
+    brave
     gnumeric
     hypnotix
     lsof
