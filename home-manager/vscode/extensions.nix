@@ -665,6 +665,12 @@ merge
             version = "0.0.2";
             sha256 = "0ppiaj23y91waisidrm0pq5by1z0r6mgazcpiz16wfwld1c6x3gm";
           };
+          "amrmetwally"."rust-mod-opener" = vscode-utils.extensionFromVscodeMarketplace {
+            name = "rust-mod-opener";
+            publisher = "amrmetwally";
+            version = "0.0.1";
+            sha256 = "sha256-auY2MxmeUFaxPUgtTOlpowsygXUusmpBWFDa72um1+8=";
+          };
         }
         (
           lib.attrsets.optionalAttrs (isLinux && (isi686 || isx86_64)) {
