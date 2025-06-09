@@ -72,7 +72,6 @@ in
           extensions.pflannery.vscode-versionlens
           extensions.inferrinizzard.prettier-sql-vscode
           extensions.janisdd.vscode-edit-csv
-          extensions.knisterpeter.vscode-github
           extensions.nhoizey.gremlins
           extensions.searking.preview-vscode
           extensions.meganrogge.template-string-converter

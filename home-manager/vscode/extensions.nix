@@ -473,12 +473,6 @@ merge
             version = "2.0.1";
             sha256 = "124jyk9iz3spq8q17z79lqgcwfabbvldcq243xbzbjmbb01ds3i5";
           };
-          "knisterpeter"."vscode-github" = vscode-utils.extensionFromVscodeMarketplace {
-            name = "vscode-github";
-            publisher = "knisterpeter";
-            version = "0.30.7";
-            sha256 = "1b1hm6z795n05mpy1b0cf0578bi8yr4d0h4w177m98ka170shz2j";
-          };
           "scala-lang"."scala" = vscode-utils.extensionFromVscodeMarketplace {
             name = "scala";
             publisher = "scala-lang";
