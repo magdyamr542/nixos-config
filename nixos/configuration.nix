@@ -61,8 +61,8 @@
 
   hardware.pulseaudio.enable = false;
 
-  hardware.bluetooth.enable = true; 
-  hardware.bluetooth.powerOnBoot = true; 
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
 
   users.defaultUserShell = pkgs.zsh;
