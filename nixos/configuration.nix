@@ -121,10 +121,13 @@
       extraPackages = with pkgs; [
         dmenu
         i3status
-        i3lock
         i3blocks
       ];
     };
+  };
+
+  programs.i3lock = {
+    enable = true;
   };
 
   services.displayManager = {
