@@ -65,6 +65,7 @@ in
     lsof
     dbeaver-bin
     teams-for-linux
+    awscli2
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];

@@ -48,6 +48,7 @@
         "colored-man-pages"
         "history-substring-search"
         "kubectl"
+        "aws"
       ];
     };
 
