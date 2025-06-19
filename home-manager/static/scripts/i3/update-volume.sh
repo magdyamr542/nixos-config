@@ -20,5 +20,5 @@ elif [ "$1" == "down" ]; then
 fi
 
 # show a notification with the new volume level
-volume=$(getdefaultsinkvol)
+volume=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | tr -d '\n')
 notify-send -t 1500 "Volume: $volume"
