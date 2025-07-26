@@ -66,6 +66,7 @@ in
     dbeaver-bin
     teams-for-linux
     awscli2
+    libsecret
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
