@@ -67,6 +67,7 @@ in
     teams-for-linux
     awscli2
     libsecret
+    openssl_legacy
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
