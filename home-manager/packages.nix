@@ -68,6 +68,7 @@ in
     awscli2
     libsecret
     openssl_legacy
+    ffmpeg
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
