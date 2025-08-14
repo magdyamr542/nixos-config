@@ -580,6 +580,7 @@ in
           "editor.inlayHints.enabled" = "offUnlessPressed";
         };
         "rust-analyzer.check.command" = "clippy";
+        "rust-analyzer.serverPath" = "~/.nix-profile/bin/rust-analyzer";
         "nix.formatterPath" = "nixfmt";
       };
     };

@@ -69,6 +69,7 @@ in
     libsecret
     openssl_legacy
     ffmpeg
+    rust-analyzer
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
