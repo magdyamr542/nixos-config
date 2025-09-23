@@ -469,6 +469,13 @@ in
             before = [ "c-r" ];
             commands = [ "redo" ];
           }
+          {
+            before = [
+              "<leader>"
+              "c"
+            ];
+            commands = [ "rust-analyzer.runFlycheck" ];
+          }
         ];
         "vim.easymotion" = true;
         "vim.incsearch" = true;
