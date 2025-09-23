@@ -70,6 +70,7 @@ in
     openssl_legacy
     ffmpeg
     rust-analyzer
+    git-lfs
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
