@@ -71,6 +71,7 @@ in
     ffmpeg
     rust-analyzer
     git-lfs
+    keyutils
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
