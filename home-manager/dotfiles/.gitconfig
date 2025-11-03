@@ -19,6 +19,9 @@ paging = always
 [interactive]
 diffFilter = delta --color-only --features=interactive
 
+[init]
+defaultBranch = main
+
 [delta "decorations"]
 commit-style = raw
 file-style = omit
