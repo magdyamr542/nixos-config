@@ -72,6 +72,7 @@ in
     rust-analyzer
     git-lfs
     keyutils
+    dig
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
