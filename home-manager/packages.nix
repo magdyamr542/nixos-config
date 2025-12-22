@@ -73,6 +73,7 @@ in
     git-lfs
     keyutils
     dig
+    unixtools.xxd
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
