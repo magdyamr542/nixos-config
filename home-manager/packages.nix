@@ -74,6 +74,7 @@ in
     keyutils
     dig
     unixtools.xxd
+    pgcli
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
