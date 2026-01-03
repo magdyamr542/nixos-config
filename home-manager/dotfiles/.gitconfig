@@ -35,3 +35,6 @@ conflictstyle = diff3
 
 [diff]
 colorMoved = default
+
+[protocol "gitos"]
+        allow = always
