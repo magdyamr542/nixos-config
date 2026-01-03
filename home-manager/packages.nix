@@ -75,6 +75,8 @@ in
     dig
     unixtools.xxd
     pgcli
+    codex
+    opencode
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
