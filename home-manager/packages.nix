@@ -77,6 +77,7 @@ in
     pgcli
     codex
     opencode
+    ripgrep
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
