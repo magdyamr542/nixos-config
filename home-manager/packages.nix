@@ -78,6 +78,7 @@ in
     codex
     opencode
     ripgrep
+    b3sum
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
