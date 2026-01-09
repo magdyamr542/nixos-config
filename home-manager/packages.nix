@@ -79,6 +79,7 @@ in
     opencode
     ripgrep
     b3sum
+    ghz
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
