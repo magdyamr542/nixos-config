@@ -55,6 +55,7 @@
 
   networking = {
     hostName = "amr";
+    extraHosts = "127.0.0.1 gitos.local";
     networkmanager.enable = true;
   };
   programs.nm-applet.enable = true;
