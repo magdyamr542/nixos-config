@@ -60,7 +60,7 @@
   };
   programs.nm-applet.enable = true;
 
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
@@ -176,6 +176,14 @@
   # https://github.com/techiescamp/vagrant-kubeadm-kubernetes
   environment.etc = {
     "vbox/networks.conf".text = "* 0.0.0.0/0 ::/0";
+  };
+
+  services.openvpn.servers.gitos = {
+    autoStart = false;
+    updateResolvConf = true;
+    config = ''
+      config ${./vpns/gitos/client.ovpn}
+    '';
   };
 
 }
