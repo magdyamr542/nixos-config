@@ -8,7 +8,9 @@ To start:
 1. sync ssh keys
    - create `./home-manager/users/amr/ssh_keys/github` and put the private key there (found in bitwarden).
    - create `./home-manager/users/amr/ssh_keys/gitlab_tu_dortmund` and put the private key there (found in bitwarden).
-1. Sync `nixos/vpns/gitos/client.ovpn`
+1. Create `nixos/vpns/gitos/client.key` and put the Gitos VPN private key there.
+   - This file is intentionally gitignored.
+   - The VPN profile reads it from `/etc/nixos/nixos/vpns/gitos/client.key` after the repo is checked out under `/etc/nixos`.
 1. `sudo nixos-rebuild switch --flake /etc/nixos#amr`
 1. `nix-shell -p home-manager`
 1. `home-manager switch --flake /etc/nixos#amr`

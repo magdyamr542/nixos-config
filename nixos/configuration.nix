@@ -57,6 +57,31 @@
     hostName = "amr";
     extraHosts = "127.0.0.1 gitos.local";
     networkmanager.enable = true;
+    networkmanager.plugins = with pkgs; [ networkmanager-openvpn ];
+    networkmanager.ensureProfiles.profiles.gitos = {
+      connection = {
+        id = "gitos";
+        type = "vpn";
+        permissions = "";
+      };
+      vpn = {
+        service-type = "org.freedesktop.NetworkManager.openvpn";
+        connection-type = "tls";
+        dev = "tun";
+        remote = "116.203.2.180";
+        port = "1194";
+        proto-tcp = "no";
+        ca = "/etc/NetworkManager/openvpn/gitos/ca.crt";
+        cert = "/etc/NetworkManager/openvpn/gitos/client.crt";
+        key = "/etc/nixos/nixos/vpns/gitos/client.key";
+        remote-cert-tls = "server";
+        cipher = "AES-256-GCM";
+        ping = "10";
+        ping-restart = "60";
+      };
+      ipv4.method = "auto";
+      ipv6.method = "auto";
+    };
   };
   programs.nm-applet.enable = true;
 
@@ -176,13 +201,31 @@
   # https://github.com/techiescamp/vagrant-kubeadm-kubernetes
   environment.etc = {
     "vbox/networks.conf".text = "* 0.0.0.0/0 ::/0";
-  };
-
-  services.openvpn.servers.gitos = {
-    autoStart = false;
-    updateResolvConf = true;
-    config = ''
-      config ${./vpns/gitos/client.ovpn}
+    "NetworkManager/openvpn/gitos/ca.crt".text = ''
+      -----BEGIN CERTIFICATE-----
+      MIIBhzCCAS6gAwIBAgIQf8AlHbNXUFSjo6KPiZqQFjAKBggqhkjOPQQDAjAkMQ4w
+      DAYDVQQKEwVnaXRPUzESMBAGA1UEAxMJZ2l0b3MgVlBOMB4XDTI1MTIyMTE3MDQ1
+      M1oXDTM1MTIxOTE3MDQ1M1owJDEOMAwGA1UEChMFZ2l0T1MxEjAQBgNVBAMTCWdp
+      dG9zIFZQTjBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABE3HiJeyKzAWRI7EMLpt
+      /0vtxXxQ3SO2vJmjZ4GPFJnserJG6Nh4xJWnWPdn0zBbgFLPMpto9CkF0NCKRIMa
+      5dKjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQW
+      BBR/mnwZYPk+STo6PLuuMwGqB1KlKjAKBggqhkjOPQQDAgNHADBEAiBH7TBiiFPx
+      17pXzLFj/Gw9XcSO+Um0FY0jCo01+w1KWQIgDQGsLwseho1pzGSBdUFSOF15H+6W
+      SeE4dgC2szAF+98=
+      -----END CERTIFICATE-----
+    '';
+    "NetworkManager/openvpn/gitos/client.crt".text = ''
+      -----BEGIN CERTIFICATE-----
+      MIIBozCCAUmgAwIBAgIQAmg2VR0FNeX28bW9bQPhzzAKBggqhkjOPQQDAjAkMQ4w
+      DAYDVQQKEwVnaXRPUzESMBAGA1UEAxMJZ2l0b3MgVlBOMB4XDTI1MTIyMTE3MDQ1
+      M1oXDTM1MTIxOTE3MDQ1M1owITEOMAwGA1UEChMFZ2l0T1MxDzANBgNVBAMTBmFk
+      bS1hbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABAf0VbXE29IZcBHsXEPGICzr
+      m5EG62rhd5fOtWPs0xPcCmITuOgmqVJIhnI+D+JX8QXQdOZZj6JKu3yeG+Kid3Oj
+      YDBeMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUH
+      AwIwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBR/mnwZYPk+STo6PLuuMwGqB1Kl
+      KjAKBggqhkjOPQQDAgNIADBFAiEAnqWiO9uAIhyMY15MxJMYGk7guHTtq+dZUcr6
+      fNWKvKUCIGv4r1xPELjhvMO0PgRHbae4ndcBWzBt9jfd34uxF9Ah
+      -----END CERTIFICATE-----
     '';
   };
 

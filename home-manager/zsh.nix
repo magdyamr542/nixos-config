@@ -37,10 +37,6 @@
       en = "setxkbmap us";
       de = "setxkbmap de";
       ar = "setxkbmap ara";
-
-      # vpn
-      gitos-vpn-up = "sudo systemctl start openvpn-gitos";
-      gitos-vpn-down = "sudo systemctl stop openvpn-gitos";
     };
 
     oh-my-zsh = {
