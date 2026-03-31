@@ -80,6 +80,7 @@ in
     ripgrep
     b3sum
     ghz
+    kubectx
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
