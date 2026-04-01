@@ -37,6 +37,9 @@
       en = "setxkbmap us";
       de = "setxkbmap de";
       ar = "setxkbmap ara";
+
+      # Open camera
+      camera = "ffplay /dev/video0";
     };
 
     oh-my-zsh = {
