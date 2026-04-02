@@ -8,6 +8,11 @@ To start:
 1. sync ssh keys
    - create `./home-manager/users/amr/ssh_keys/github` and put the private key there (found in bitwarden).
    - create `./home-manager/users/amr/ssh_keys/gitlab_tu_dortmund` and put the private key there (found in bitwarden).
+1. Create the GPG key files:
+   - `./home-manager/users/amr/gpg/gitos.private.asc` with the armored private key.
+   - The public key and fingerprint are declared in `./home-manager/gpg.nix`.
+   - Only `gitos.private.asc` needs to stay secret.
+   - Home Manager imports them into `~/.gnupg` during activation and marks the key as ultimately trusted.
 1. Create `nixos/vpns/gitos/client.key` and put the Gitos VPN private key there.
    - This file is intentionally gitignored.
    - The VPN profile reads it from `/etc/nixos/nixos/vpns/gitos/client.key` after the repo is checked out under `/etc/nixos`.

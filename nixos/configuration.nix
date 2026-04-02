@@ -12,6 +12,7 @@
     ./hardware-configuration.nix
     ./hardware-builder.nix
     ./system-packages.nix
+    ./gpg.nix
   ];
 
   # Bootloader.

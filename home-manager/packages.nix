@@ -81,6 +81,7 @@ in
     b3sum
     ghz
     kubectx
+    sops
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];

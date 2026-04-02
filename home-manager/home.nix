@@ -12,6 +12,7 @@
     ./zsh.nix
     ./neovim.nix
     ./vscode/vscode.nix
+    ./gpg.nix
   ];
 
   nixpkgs = {
@@ -222,5 +223,4 @@
       nix-direnv.enable = true;
     };
   };
-
 }

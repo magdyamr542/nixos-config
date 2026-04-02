@@ -2,5 +2,7 @@
 nixos/users/amr/password.txt
 home-manager/users/amr/ssh_keys/*
 !home-manager/users/amr/ssh_keys/*.pub
+home-manager/users/amr/gpg/*
+!home-manager/users/amr/gpg/.gitkeep
 nixos/vpns/gitos/client.ovpn
 nixos/vpns/gitos/client.key
