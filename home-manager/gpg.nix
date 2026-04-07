@@ -64,7 +64,7 @@ let
       name = "gitos";
       fingerprint = "86574767979F58953067131DDDEA4243D182237F";
       publicKeyFile = gitosPublicKey;
-      privateKeyFile = "/etc/nixos/home-manager/users/amr/gpg/gitos.private.asc";
+      privateKeyFile = "/etc/nixos/home-manager/ignored_files/gitos_gpg_private_key";
     }
   ];
 

@@ -1,5 +1,6 @@
 {
   "[nix]": {
     "editor.defaultFormatter": "jnoortheen.nix-ide"
-  }
+  },
+  "cSpell.words": ["nixos"]
 }

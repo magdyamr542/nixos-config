@@ -74,7 +74,7 @@
         proto-tcp = "no";
         ca = "/etc/NetworkManager/openvpn/gitos/ca.crt";
         cert = "/etc/NetworkManager/openvpn/gitos/client.crt";
-        key = "/etc/nixos/nixos/vpns/gitos/client.key";
+        key = "/etc/nixos/nixos/ignored_files/gitos_openvpn_client_private_key";
         remote-cert-tls = "server";
         cipher = "AES-256-GCM";
         ping = "10";
