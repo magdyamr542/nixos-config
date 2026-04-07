@@ -82,6 +82,7 @@ in
     ghz
     kubectx
     sops
+    k9s
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
