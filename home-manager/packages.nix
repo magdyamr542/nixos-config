@@ -83,6 +83,7 @@ in
     kubectx
     sops
     k9s
+    bubblewrap
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ./scripts ];
