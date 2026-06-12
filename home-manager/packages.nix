@@ -44,6 +44,7 @@ in
     picom
     pulseaudio
     xclip
+    xdg-utils
     libnotify
     kustomize
     nix-prefetch-git

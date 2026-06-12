@@ -190,6 +190,19 @@
   };
 
   # File associations
+  xdg.desktopEntries.iptvnator = {
+    name = "IPTVnator";
+    genericName = "IPTV Player";
+    comment = "Start IPTVnator locally";
+    exec = "iptvnator";
+    terminal = false;
+    categories = [
+      "AudioVideo"
+      "Video"
+    ];
+    icon = "${./static/icons/iptv.svg}";
+  };
+
   xdg.mime.enable = true;
   xdg.mimeApps = {
     enable = true;

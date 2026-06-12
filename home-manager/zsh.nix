@@ -27,6 +27,7 @@
 
       # general
       ll = "ls -l";
+      iptv = "iptvnator";
       tm = "ssh-tunnel-manager";
       br = "browser-tab-groups";
       t = "tree";

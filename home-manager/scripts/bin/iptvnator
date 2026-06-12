@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_dir="${IPTVNATOR_REPO_DIR:-"$HOME/Documents/projects/iptvnator"}"
+repo_url="${IPTVNATOR_REPO_URL:-https://github.com/4gray/iptvnator.git}"
+app_url="${IPTVNATOR_URL:-http://localhost:4333/}"
+compose_file="docker/docker-compose.yml"
+compose_project="${IPTVNATOR_COMPOSE_PROJECT:-iptvnator}"
+legacy_compose_project="${IPTVNATOR_LEGACY_COMPOSE_PROJECT:-docker}"
+
+open_app() {
+  xdg-open "$app_url" >/dev/null 2>&1 &
+}
+
+is_compose_service_running() {
+  local project="$1"
+  local containers
+
+  containers="$(
+    docker ps \
+      --filter "label=com.docker.compose.project=$project" \
+      --filter "label=com.docker.compose.service=iptvnator" \
+      --filter "status=running" \
+      --format '{{.ID}}' 2>/dev/null || true
+  )"
+
+  [[ -n "$containers" ]]
+}
+
+if command -v docker >/dev/null 2>&1; then
+  if is_compose_service_running "$compose_project" || is_compose_service_running "$legacy_compose_project"; then
+    open_app
+    exit 0
+  fi
+fi
+
+if [[ ! -e "$repo_dir" ]]; then
+  mkdir -p "$(dirname "$repo_dir")"
+  git clone "$repo_url" "$repo_dir"
+elif [[ -d "$repo_dir/.git" ]]; then
+  git -C "$repo_dir" pull --ff-only
+else
+  printf 'iptvnator: %s exists but is not a git repository\n' "$repo_dir" >&2
+  exit 1
+fi
+
+cd "$repo_dir"
+
+if docker compose version >/dev/null 2>&1; then
+  docker compose -p "$compose_project" -f "$compose_file" up --build -d
+elif command -v docker-compose >/dev/null 2>&1; then
+  docker-compose -p "$compose_project" -f "$compose_file" up --build -d
+else
+  printf 'iptvnator: neither "docker compose" nor "docker-compose" is available\n' >&2
+  exit 1
+fi
+
+open_app
