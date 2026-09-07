@@ -41,6 +41,9 @@
 
       # Open camera
       camera = "ffplay /dev/video0";
+
+      # Screen recording
+      screenrecord = "obs";
     };
 
     oh-my-zsh = {

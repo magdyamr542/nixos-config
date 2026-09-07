@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+mapfile -d '' nix_files < <(
+  git diff --cached --name-only --diff-filter=ACMR -z -- '*.nix'
+)
+
+if ((${#nix_files[@]} == 0)); then
+  exit 0
+fi
+
+partially_staged=()
+for file in "${nix_files[@]}"; do
+  if ! git diff --quiet -- "$file"; then
+    partially_staged+=("$file")
+  fi
+done
+
+if ((${#partially_staged[@]} > 0)); then
+  echo "Cannot format partially staged Nix files safely:" >&2
+  printf '  %s\n' "${partially_staged[@]}" >&2
+  echo "Stage or stash their remaining changes, then commit again." >&2
+  exit 1
+fi
+
+echo "Formatting staged Nix files with nix fmt..."
+nix fmt -- "${nix_files[@]}"
+git add -- "${nix_files[@]}"

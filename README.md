@@ -38,3 +38,14 @@ To bring the system up from scratch, do the following:
 
 When using the git repo in the `/etc/nixos` directory, make sure to delete `.git` and `.gitignore`. Otherwise, the nix flake
 ignores files needed in the build process like the private keys and the user password added above.
+
+## Git hooks
+
+Enable the repository's pre-commit hook once after cloning:
+
+```sh
+git config core.hooksPath .githooks
+```
+
+The hook runs the flake's `nixfmt-rfc-style` formatter on staged Nix files and
+stages the formatted result before the commit is created.
