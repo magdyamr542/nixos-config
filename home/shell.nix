@@ -21,6 +21,23 @@
     # remove dotfiles/zsh/zshrc and this direct import.
     initContent = builtins.readFile ../dotfiles/zsh/zshrc;
 
+    profileExtra = ''
+      # Keep Homebrew available for packages that have not moved to Nix yet,
+      # but do not let its bin directories shadow declaratively managed tools.
+      if [[ -x /opt/homebrew/bin/brew ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+      fi
+
+      typeset -U path
+      path=(
+        "$HOME/.nix-profile/bin"
+        "/etc/profiles/per-user/$USER/bin"
+        "/run/current-system/sw/bin"
+        "/nix/var/nix/profiles/default/bin"
+        $path
+      )
+    '';
+
     shellAliases = {
       cat = "bat";
       ll = "eza --long --all --group-directories-first";
