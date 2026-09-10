@@ -24,22 +24,27 @@ Expected values are `~/.ssh/lynqtech_github`, enabled AddKeysToAgent
 
 ## Zsh
 
-- [ ] Replace the imported `dotfiles/zsh/zshrc` with native Home Manager
+- [x] Replace the imported `dotfiles/zsh/zshrc` with native Home Manager
   options.
-- [ ] Use `../nixos-config/home-manager/zsh.nix` as the starting design for
+- [x] Use `../nixos-config/home-manager/zsh.nix` as the starting design for
   `programs.zsh`, Oh My Zsh plugins, Powerlevel10k, and `programs.fzf`.
-- [ ] Adapt the reference instead of copying Linux-specific commands such as
+- [x] Adapt the reference instead of copying Linux-specific commands such as
   `nixos-rebuild`, `home-manager switch`, and `xdg-open`.
-- [ ] Move aliases, history, completions, environment variables, and key
+- [x] Move aliases, history, completions, environment variables, and key
   bindings into their Home Manager options where available.
-- [ ] Audit and migrate the manually sourced files and runtime managers:
+- [x] Audit the manually sourced files and runtime managers:
   `.p10k.zsh`, `.aliases.sh`, `.funcs.sh`, `.proot`, NVM, SDKMAN, GVM, pyenv,
-  kubectl/Helm completion files, and the Vagrant completion paths.
-- [ ] Enable Home Manager's autosuggestion and syntax-highlighting integrations
-  after the duplicate Oh My Zsh/manual loading has been removed.
-- [ ] Decide whether to keep Powerlevel10k or switch to the already declared
-  Starship prompt; enable only one prompt integration.
-- [ ] Remove `dotfiles/zsh/zshrc` only after a new login shell has been tested.
+  kubectl/Helm completion files, and the Vagrant completion paths. Powerlevel10k
+  and shell functions are now repository-managed; the installed language
+  version managers remain conditionally initialized for compatibility.
+- [x] Enable Home Manager's autosuggestion, syntax-highlighting, history search,
+  autojump, FZF, completion, and Oh My Zsh integrations without duplicate
+  manual loading.
+- [x] Keep Powerlevel10k and leave Starship's Zsh integration disabled so only
+  one prompt is active.
+- [ ] Decide how NVM, SDKMAN, GVM, and pyenv should be managed long term.
+- [x] Remove `dotfiles/zsh/zshrc` after testing the native configuration in a
+  new login shell.
 
 ## Homebrew command-line packages
 
