@@ -110,12 +110,20 @@ type -a delta
 
 ## Neovim
 
-- [ ] Inventory all 22 modules loaded by the imported `init.lua`, including
-  plugins, language servers, formatters, and Mason-installed tools.
-- [ ] Choose a native approach (Home Manager's Neovim module, Nixvim, or a
-  deliberately packaged Lua configuration) before changing the live setup.
-- [ ] Migrate and test incrementally, then remove `dotfiles/nvim/init.lua` and
-  any obsolete Mason/Homebrew dependencies.
+- [ ] Inventory all 22 modules loaded by `init.lua`, including plugins,
+  language servers, formatters, and Mason-installed tools.
+- [x] Choose a native approach: mirror `../nixos-config/home-manager/neovim.nix`
+  and fetch the config from its own GitHub repo
+  (`magdyamr542/nvim`, pinned via `pkgs.fetchFromGitHub`) with
+  `xdg.configFile.nvim`, instead of committing a local copy of `init.lua`
+  into this repo. Plugins stay packer/Mason-managed, same as on the
+  reference Linux config; only `packer-nvim` itself needs to be declared
+  via `programs.neovim.plugins` so `packadd packer.nvim` works.
+- [x] Migrate `home/programs/default.nix` to the fetched config and remove
+  `dotfiles/nvim/init.lua`. Verified the fetched `init.lua` at the pinned
+  commit is byte-identical to the previously imported copy.
+- [ ] Apply the new generation and confirm Neovim starts, packer bootstraps,
+  and Mason-installed LSPs still work before considering this done.
 
 ## GUI applications and cleanup
 
