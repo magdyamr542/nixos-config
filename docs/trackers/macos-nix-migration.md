@@ -79,16 +79,30 @@ type -a delta
 
 ## Homebrew command-line packages
 
-- [ ] Capture `brew leaves`, `brew services list`, and any project-specific
-  dependencies. Run the services command outside tmux.
-- [ ] Verify the Nix-managed replacements already present for `bat`, `fd`,
-  `git`, `jq`, `neovim`, `tmux`, `tree`, `wget`, and Zsh.
+- [x] Capture `brew leaves` and any project-specific dependencies.
+  `brew services list` still needs to be run outside tmux (this session was
+  inside tmux, so it was skipped).
+- [x] Verify the Nix-managed replacements already present for `bat`, `fd`,
+  `git`, `jq`, `neovim`, `tmux`, `tree`, `wget`, and Zsh. `autojump` and
+  `git-delta` are also already covered.
 - [ ] Migrate remaining formulae in small functional batches: developer tools,
   cloud/Kubernetes tools, database clients, media tools, security tools, and
   language toolchains.
+  - [x] Developer tools batch: `gh`, `golangci-lint`, `httpie`, `yq` (as
+    `yq-go`), `protobuf`, `rename`, `tldr`.
+    `watch` was left on Homebrew: it has no Darwin nixpkgs equivalent
+    (upstream `procps` is Linux-only there), and the closest nixpkgs
+    alternative (`viddy`) is a different tool with a different name, not a
+    like-for-like swap.
 - [ ] For every batch, declare the Nix packages first, apply, verify with
   `type -a` and representative commands, and only then uninstall the matching
-  Homebrew formulae.
+  Homebrew formulae. When uninstalling, check `brew uninstall`'s autoremove
+  output carefully: removing `golangci-lint` also autoremoved the `go`
+  formula (its only remaining dependent), which silently took the `go`
+  compiler off `PATH` even though `go` itself was not part of that batch.
+  It was reinstalled via `brew install go`; treat `go`/language toolchains
+  as their own deliberate batch rather than letting them go missing as a
+  side effect.
 - [ ] Keep Homebrew later than the Nix profiles in `PATH` until the migration is
   complete.
 - [ ] Review whether any required Homebrew services need an equivalent

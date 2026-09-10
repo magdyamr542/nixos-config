@@ -7,10 +7,17 @@
     curl
     eza
     fd
+    gh
+    golangci-lint
     htop
+    httpie
     jq
+    protobuf
+    rename
     ripgrep
+    tldr
     tree
     wget
+    yq-go
   ];
 }
