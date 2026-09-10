@@ -111,6 +111,7 @@
       o = "open";
       rebuild = "make -C ~/nix-macos apply";
       t = "tree";
+      nix-shell = "nix-shell --run zsh";
     };
   };
 
