@@ -127,9 +127,25 @@ type -a delta
 
 ## GUI applications and cleanup
 
-- [ ] Review Homebrew casks individually. Keep signed, vendor-updated, App
-  Store, or otherwise better-supported GUI applications in Homebrew where that
-  is the more reliable distribution channel.
+- [x] Review Homebrew casks individually and migrate the ones with a working
+  nixpkgs equivalent: `1password`, `1password-cli`, `claude-code@latest`,
+  `dbeaver-community`, `drawio`, `font-hack-nerd-font`, `hashicorp-vagrant`,
+  `insomnia`, `iterm2`, `keepassxc`, `ngrok`, `visual-studio-code` (now in
+  `home/gui-apps.nix`), plus `keycast` migrated to nixpkgs' `keycastr` (a
+  different fork of the same idea, confirmed acceptable).
+  `_1password-cli`, `_1password-gui`, `claude-code`, `ngrok`, and `vagrant`
+  are unfree in nixpkgs; allowlisted individually via
+  `nixpkgs.config.allowUnfreePredicate` in `darwin/default.nix` rather than
+  flipping `allowUnfree` globally.
+- [x] Kept on Homebrew, no nixpkgs equivalent available: `hashicorp-boundary-desktop`
+  (nixpkgs only has the `boundary` CLI, not the desktop client),
+  `omnissa-horizon-client` (exists in nixpkgs but marked unsupported on
+  aarch64-darwin), `iptvnator` and `presentation` (not packaged in nixpkgs
+  at all). `rar` is also kept, but note it's already broken on Homebrew's
+  side (Homebrew disabled the cask on 2026-09-01 over a Gatekeeper failure)
+  independent of this migration.
+- [ ] Kept on Homebrew by choice, not investigated further: `zed` (the
+  editor) — skip any future attempt to migrate this one.
 - [ ] Decide whether retained formulae/casks should be declared through
   nix-darwin's Homebrew module.
 - [ ] Correct the README rollback example to `sudo darwin-rebuild --rollback`.
