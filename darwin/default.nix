@@ -44,7 +44,7 @@
 
     # Conservative examples; remove either line to leave that preference alone.
     defaults = {
-      dock.autohide = true;
+      dock.autohide = false;
       finder.ShowPathbar = true;
     };
 
