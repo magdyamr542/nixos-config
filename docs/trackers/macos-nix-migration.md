@@ -22,6 +22,38 @@ ssh -G turntable.example | grep '^port '
 Expected values are `~/.ssh/lynqtech_github`, enabled AddKeysToAgent
 (`ssh -G` normally prints `true`), and port `22022`.
 
+## Git
+
+- [x] Move the existing `~/.gitconfig` identity, aliases, URL rewrite, merge,
+  diff, column, and Delta settings into `home/git.nix`.
+- [x] Install and integrate Delta through `programs.delta` instead of relying
+  on the Homebrew executable.
+- [x] Apply the new generation and verify Git reads the managed
+  `~/.config/git/config` (XDG) settings directly before deleting backups.
+
+An earlier draft added a `~/.gitconfig` include shim pointing at the XDG
+file, on the assumption that Git ignores XDG config once `~/.gitconfig`
+exists. That assumption is wrong: Git reads both files (least to most
+specific) when they exist, so the shim made Git parse the same settings
+twice (confirmed with `git config --show-origin --get-all interactive.diffFilter`
+showing every value from two origins pointing at the same file). Home
+Manager's `programs.git` module always targets `$XDG_CONFIG_HOME/git/config`
+regardless of `xdg.enable`, and Git 2.53 discovers that path natively, so
+the shim was removed and `~/.gitconfig` is no longer managed.
+
+Verification:
+
+```sh
+git config --global --show-origin --list
+git config --global --get alias.crb
+git config --global --get url.git@github.com:enercity.insteadof
+git config --global --get merge.conflictstyle
+git config --global --get diff.colormoved
+git config --global --get delta.features
+git config --global --get-all interactive.diffFilter  # must show a single origin
+type -a delta
+```
+
 ## Zsh
 
 - [x] Replace the imported `dotfiles/zsh/zshrc` with native Home Manager
@@ -42,7 +74,6 @@ Expected values are `~/.ssh/lynqtech_github`, enabled AddKeysToAgent
   manual loading.
 - [x] Keep Powerlevel10k and leave Starship's Zsh integration disabled so only
   one prompt is active.
-- [ ] Decide how NVM, SDKMAN, GVM, and pyenv should be managed long term.
 - [x] Remove `dotfiles/zsh/zshrc` after testing the native configuration in a
   new login shell.
 
