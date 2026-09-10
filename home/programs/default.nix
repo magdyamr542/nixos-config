@@ -23,15 +23,20 @@
     enable = true;
     enableDefaultConfig = false;
 
-    # TODO: MUST migrate these legacy host blocks to programs.ssh.settings,
-    # then remove dotfiles/ssh/config and this direct import.
-    extraConfig = builtins.readFile ../../dotfiles/ssh/config;
+    settings = {
+      "github.com" = {
+        AddKeysToAgent = "yes";
+        IdentityFile = "~/.ssh/lynqtech_github";
+      };
 
-    settings."*" = {
-      AddKeysToAgent = "yes";
-      Compression = false;
-      ServerAliveInterval = 60;
-      ServerAliveCountMax = 3;
+      "turntable.*".Port = 22022;
+
+      "*" = {
+        AddKeysToAgent = "yes";
+        Compression = false;
+        ServerAliveInterval = 60;
+        ServerAliveCountMax = 3;
+      };
     };
   };
 }

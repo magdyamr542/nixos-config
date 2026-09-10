@@ -1,6 +1,0 @@
-Host github.com
-  AddKeysToAgent yes
-  IdentityFile ~/.ssh/lynqtech_github
-
-Host turntable.*
-    Port 22022
