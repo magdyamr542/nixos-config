@@ -4,6 +4,7 @@
   imports = [
     ./packages.nix
     ./git.nix
+    ./gui-apps.nix
     ./shell.nix
     ./programs
   ];

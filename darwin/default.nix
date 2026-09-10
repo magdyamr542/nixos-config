@@ -1,5 +1,6 @@
 {
   host,
+  lib,
   pkgs,
   self,
   ...
@@ -8,6 +9,19 @@
 {
   nixpkgs.hostPlatform = host.system;
   nixpkgs.config.allowUnfree = false;
+
+  # Individually allowlisted unfree GUI apps migrated from Homebrew casks.
+  # Keep this list minimal instead of flipping allowUnfree globally.
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      "1password"
+      "1password-cli"
+      "claude-code"
+      "ngrok"
+      "vagrant"
+      "vscode"
+    ];
 
   # Keep only tools that every local user needs here. Developer tools belong
   # in home/packages.nix so they remain scoped to the configured user.
