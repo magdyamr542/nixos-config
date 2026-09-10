@@ -277,6 +277,16 @@ Commit `flake.lock`. Do not commit `result` build links, `.DS_Store`, generated 
 │   ├── shell.nix
 │   └── programs/default.nix
 ├── dotfiles/ripgrep/ripgreprc
+├── dotfiles/nvim/init.lua    # imported legacy Neovim entry point
+├── dotfiles/ssh/config       # imported legacy SSH host blocks
+├── dotfiles/zsh/zshrc        # imported legacy shell configuration
 ├── scripts/bootstrap.sh
 └── Makefile
 ```
+
+The Neovim, SSH, and zsh files are temporary migration inputs. Their adjacent
+`TODO` comments are intentional: migrate their settings to `programs.neovim`,
+`programs.ssh`, `programs.zsh`, and other appropriate Home Manager/Nix modules,
+then remove the legacy files. Until then, Oh My Zsh provides autosuggestions
+and syntax highlighting, Powerlevel10k provides the prompt, and Home Manager's
+duplicate plugin and Starship integrations remain disabled.
