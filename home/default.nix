@@ -6,6 +6,7 @@
     ./git.nix
     ./gui-apps.nix
     ./shell.nix
+    ./tmux.nix
     ./programs
   ];
 

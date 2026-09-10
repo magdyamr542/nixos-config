@@ -36,13 +36,6 @@ in
     recursive = true;
   };
 
-  programs.tmux = {
-    enable = true;
-    clock24 = true;
-    keyMode = "vi";
-    mouse = true;
-  };
-
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
