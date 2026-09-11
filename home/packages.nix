@@ -81,6 +81,7 @@ in
     kubectx
     sops
     k9s
+    claude-code
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ../scripts ];

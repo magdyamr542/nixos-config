@@ -2,8 +2,7 @@
 
 ## Overview
 
-This repository manages one Linux workstation as a reproducible NixOS
-configuration:
+This repository manages Linux machines as reproducible NixOS configurations:
 
 - **NixOS** owns boot, hardware, users, networking, services, and software
   needed system-wide.
@@ -16,33 +15,29 @@ configuration:
 
 The ownership boundary is deliberate:
 
-| Concern | Owner | Location |
-| --- | --- | --- |
-| Host identity and architecture | Flake host record | `hosts/linux.nix` |
-| Boot, user, locale, and shared Nix settings | NixOS entry point | `nixos/default.nix` |
-| Desktop, networking, security, and virtualization | NixOS modules | `nixos/modules/` |
-| User packages and program configuration | Home Manager | `home/` |
-| Plain files without a useful module | Home Manager | `dotfiles/` |
-| Locally packaged programs | nixpkgs derivations | `packages/default.nix` |
+| Concern                                           | Owner               | Location               |
+| ------------------------------------------------- | ------------------- | ---------------------- |
+| Host identity and architecture                    | Flake host records  | `hosts/`               |
+| User, locale, and shared Nix settings             | NixOS entry point   | `nixos/default.nix`    |
+| Hardware, boot, and host-only modules             | NixOS host modules  | `nixos/hosts/`         |
+| Desktop, networking, security, and virtualization | NixOS modules       | `nixos/modules/`       |
+| User packages and program configuration           | Home Manager        | `home/`                |
+| Plain files without a useful module               | Home Manager        | `dotfiles/`            |
+| Locally packaged programs                         | nixpkgs derivations | `packages/default.nix` |
 
 NixOS and Home Manager are applied together through one system configuration.
 
 ## Host configuration
 
-`hosts/linux.nix` is the single source of truth for the configured identity:
+Each file under `hosts/` describes one flake output and points to its NixOS
+host module. The available configurations are:
 
-```nix
-{
-  username = "amr";
-  hostname = "amr";
-  system = "x86_64-linux";
-  fullName = "amr";
-  email = "magdyamr542@gmail.com";
-}
-```
+- `amr`: the physical workstation, declared in `hosts/linux.nix`;
+- `nixbox`: the disposable VirtualBox test machine, declared in
+  `hosts/nixbox.nix`.
 
-Review these values before applying the repository to another machine. The
-hardware configuration is separate in `nixos/hardware-configuration.nix`.
+Physical and VM hardware settings are deliberately separate. Never apply the
+`amr` output to nixbox or the `nixbox` output to the physical machine.
 
 `system.stateVersion` and `home.stateVersion` are compatibility markers, not
 package versions. Do not routinely change them during updates or migrations.
@@ -70,7 +65,7 @@ sudo chmod 0600 /etc/nixos/secrets/amr-password-hash
 
 NixOS reads this external file through `hashedPasswordFile` during activation.
 
-### SSH keys
+### SSH keys (optional)
 
 Install private SSH keys directly into the user's home directory:
 
@@ -80,9 +75,9 @@ install -m 0600 /path/to/github-private-key ~/.ssh/github
 install -m 0600 /path/to/gitlab-private-key ~/.ssh/gitlab_tu_dortmund
 ```
 
-Public keys are tracked under `dotfiles/ssh/`. Home Manager declares host
-behavior in `home/programs/default.nix`; it does not place private keys into the
-Nix store.
+Public keys are tracked under `dotfiles/ssh/`. Private keys are never placed in
+the Nix store. Missing private keys do not prevent a build or activation; only
+the corresponding SSH connection is unavailable.
 
 ## Fresh-machine preparation
 
@@ -99,21 +94,48 @@ sudo nixos-generate-config --show-hardware-config \
   > nixos/hardware-configuration.nix
 ```
 
-Then:
+Then, on the physical workstation:
 
 ```sh
 git clone <your-repository-url> ~/nixos-config
 cd ~/nixos-config
 $EDITOR hosts/linux.nix
 # Provision the external secrets described above.
-./scripts/bootstrap.sh
+./scripts/bootstrap.sh --host amr
+```
+
+### Testing with nixbox
+
+The included `Vagrantfile` creates the supported disposable test machine with
+an 80 GB dynamically allocated primary disk. Its shared `/vagrant` folder is
+disabled because the repository is cloned directly into the guest:
+
+```sh
+vagrant up
+vagrant ssh
+git clone <your-repository-url> ~/nixos-config
+cd ~/nixos-config
+./scripts/bootstrap.sh --host nixbox
+```
+
+The nixbox host leaves Vagrant's managed login key untouched, uses BIOS GRUB on `/dev/sda`,
+and enables VirtualBox guest support. It excludes the physical machine's EFI,
+disk, and VirtualBox-host configuration. It also reuses the existing `vagrant`
+account and therefore requires no external password hash.
+
+After a successful switch, leave the guest and test a real reboot:
+
+```sh
+exit
+vagrant reload
+vagrant ssh
 ```
 
 The bootstrap script:
 
 1. refuses to run outside Linux and NixOS;
 2. maps the detected CPU architecture to its Nix system name;
-3. checks the configured host, user, and architecture;
+3. checks the configured hostname, user, and architecture;
 4. checks required external files without displaying their contents;
 5. validates and builds the complete flake;
 6. applies the NixOS and Home Manager generation together.
@@ -129,13 +151,15 @@ The normal loop is:
 git pull
 # Edit configuration.
 make check
-make apply
+make apply                 # defaults to the current short hostname
+make HOST=nixbox apply     # explicit selection
 ```
 
-`make apply` discovers the only configured hostname and runs the equivalent of:
+`make apply` selects the current short hostname by default. `HOST` can override
+that selection, for example:
 
 ```sh
-sudo nixos-rebuild switch --flake .#amr
+make HOST=amr apply
 ```
 
 Home Manager is part of this system generation. A separate
@@ -148,13 +172,13 @@ shell paths and environment variables.
 
 ## Makefile commands
 
-| Command | Purpose |
-| --- | --- |
-| `make format` | Format every Git-tracked Nix file. |
-| `make check` | Evaluate all flake outputs and the NixOS system derivation. |
-| `make build` | Build the complete generation without activating it. |
-| `make apply` | Build and switch NixOS and Home Manager together. |
-| `make update` | Update `flake.lock`, then run the checks. |
+| Command       | Purpose                                                           |
+| ------------- | ----------------------------------------------------------------- |
+| `make format` | Format every Git-tracked Nix file.                                |
+| `make check`  | Evaluate all outputs and the selected NixOS system derivation.    |
+| `make build`  | Build the selected generation without activating it.              |
+| `make apply`  | Build and switch the selected system and Home Manager generation. |
+| `make update` | Update `flake.lock`, then run the checks.                         |
 
 The formatter intentionally uses `git ls-files`; ignored files and nested
 working copies are never formatted accidentally.
@@ -231,9 +255,9 @@ repository source and rebuild instead of editing generated files in `$HOME`.
 
 ## Hardware and virtualization
 
-`nixos/hardware-configuration.nix` is generated for the current physical
-machine. Host-independent virtualization settings live in
-`nixos/modules/virtualization.nix`.
+`nixos/hardware-configuration.nix` belongs to the physical machine.
+`nixos/hardware-nixbox.nix` belongs to the pinned nixbox image. Shared settings
+live under `nixos/modules/`, while host-only imports live under `nixos/hosts/`.
 
 `nixos/modules/virtualbox-guest.nix` currently enables VirtualBox guest
 additions and group membership. Keep it imported only while this host needs

@@ -1,6 +1,6 @@
 .PHONY: apply build check update format
 
-HOST = $$(nix eval --raw .\#nixosConfigurations --apply 'configs: builtins.head (builtins.attrNames configs)')
+HOST ?= $(shell hostname -s)
 
 apply:
 	sudo nixos-rebuild switch --flake .\#$(HOST)

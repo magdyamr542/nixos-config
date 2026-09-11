@@ -18,22 +18,24 @@
     }@inputs:
     let
       inherit (self) outputs;
-      host = import ./hosts/linux.nix;
-    in
-    {
-      # NixOS configuration entrypoint
-      # Available through 'nixos-rebuild --flake .#your-hostname'
-      nixosConfigurations = {
-        ${host.hostname} = nixpkgs.lib.nixosSystem {
+      hosts = {
+        amr = import ./hosts/linux.nix;
+        nixbox = import ./hosts/nixbox.nix;
+      };
+      mkNixosConfiguration =
+        host:
+        nixpkgs.lib.nixosSystem {
           specialArgs = { inherit host inputs outputs; };
-          # > Our main nixos configuration file <
           modules = [
             ./nixos
+            host.nixosModule
             home-manager.nixosModules.home-manager
           ];
         };
-      };
+    in
+    {
+      nixosConfigurations = nixpkgs.lib.mapAttrs (_: mkNixosConfiguration) hosts;
 
-      formatter.${host.system} = nixpkgs.legacyPackages.${host.system}.nixfmt-rfc-style;
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
     };
 }

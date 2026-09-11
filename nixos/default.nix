@@ -11,18 +11,11 @@
 
   # You can import other NixOS modules here
   imports = [
-    ./hardware-configuration.nix
     ./modules/desktop.nix
     ./modules/networking.nix
     ./modules/packages.nix
     ./modules/security.nix
-    ./modules/virtualization.nix
-    ./modules/virtualbox-guest.nix
   ];
-
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
   nixpkgs = {
     # You can add overlays here
@@ -73,21 +66,15 @@
       description = "User ${host.username}";
       name = host.username;
       group = host.username;
-      extraGroups = [
-        "wheel"
-        "docker"
-        "networkmanager"
-        "audio"
-        "vboxusers"
-      ];
-      hashedPasswordFile = "/etc/nixos/secrets/${host.username}-password-hash";
+      extraGroups = host.extraGroups;
       home = "/home/${host.username}";
       createHome = true;
       useDefaultShell = true;
-      openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOT+/Bl0QBOJCJZG+EoZENziljwEg74RbZXw8bjWgIlk magdyamr542@gmail.com"
-      ];
+      openssh.authorizedKeys.keys = host.authorizedKeys;
       isNormalUser = true;
+    }
+    // lib.optionalAttrs (host.passwordHashFile != null) {
+      hashedPasswordFile = host.passwordHashFile;
     };
   };
 
