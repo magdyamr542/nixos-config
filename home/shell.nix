@@ -1,6 +1,4 @@
 {
-  inputs,
-  lib,
   config,
   pkgs,
   ...
@@ -21,8 +19,6 @@
 
       #nix
       nix-shell = "nix-shell --run zsh";
-      update = "sudo nixos-rebuild switch --flake /etc/nixos#amr";
-      updatehome = "home-manager switch --flake /etc/nixos#amr";
       deletegarbage = "sudo nix-collect-garbage --delete-old";
 
       # general

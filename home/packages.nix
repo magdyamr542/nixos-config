@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 let
-  customGoPrograms = pkgs.callPackage ./custom-programs/go.nix { };
+  customGoPrograms = pkgs.callPackage ../packages { };
 in
 {
 
@@ -12,7 +12,6 @@ in
     zsh-powerlevel10k
     zsh-syntax-highlighting
     zsh-history-substring-search
-    tmux
     alacritty
     arandr
     unzip
@@ -37,7 +36,6 @@ in
     gotools
     delve
     autojump
-    delta
     rofi
     feh
     networkmanagerapplet
@@ -71,7 +69,6 @@ in
     openssl_legacy
     ffmpeg
     rust-analyzer
-    git-lfs
     keyutils
     dig
     unixtools.xxd
@@ -86,7 +83,7 @@ in
     k9s
     (pkgs.buildEnv {
       name = "my-bash-scripts";
-      paths = [ ./scripts ];
+      paths = [ ../scripts ];
     })
   ];
 

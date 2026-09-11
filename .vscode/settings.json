@@ -2,5 +2,11 @@
   "[nix]": {
     "editor.defaultFormatter": "jnoortheen.nix-ide"
   },
-  "cSpell.words": ["nixos"]
+  "cSpell.words": [
+    "networkmanager",
+    "nixos",
+    "pkgs",
+    "vboxusers",
+    "virtualisation"
+  ]
 }

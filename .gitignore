@@ -1,6 +1,10 @@
 .vagrant
+result
+result-*
 home-manager/users/amr/ssh_keys/*
 !home-manager/users/amr/ssh_keys/*.pub
+dotfiles/ssh/*
+!dotfiles/ssh/*.pub
 home-manager/users/amr/gpg/*
 !home-manager/users/amr/gpg/.gitkeep
 ignored_files

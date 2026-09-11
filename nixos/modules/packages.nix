@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  # System packages
+  # Packages needed by every local user or by system administration.
   environment.systemPackages = with pkgs; [
     findutils
     gnumake
