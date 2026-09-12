@@ -5,6 +5,7 @@ set -Eeuo pipefail
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 readonly REPO_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
 readonly FLAKE_FEATURES="nix-command flakes"
+readonly FLAKE_REF=".?submodules=1"
 
 log() {
   printf '\n==> %s\n' "$*"
@@ -14,6 +15,28 @@ die() {
   printf 'error: %s\n' "$*" >&2
   exit 1
 }
+
+usage() {
+  printf 'usage: %s [--host HOST]\n' "$0"
+}
+
+requested_host="${HOST:-}"
+while (( $# > 0 )); do
+  case "$1" in
+    --host)
+      (( $# >= 2 )) || die "--host requires a value"
+      requested_host="$2"
+      shift 2
+      ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    *)
+      die "unknown argument: $1"
+      ;;
+  esac
+done
 
 if [[ "$(uname -s)" != "Darwin" ]]; then
   die "this bootstrap script supports macOS only"
@@ -51,34 +74,47 @@ command -v nix >/dev/null 2>&1 || die "Nix was installed but is not on PATH; ope
 cd "${REPO_DIR}"
 nix_cmd=(nix --extra-experimental-features "${FLAKE_FEATURES}")
 
-configured_host="$(
-  "${nix_cmd[@]}" eval --raw '.?submodules=1#darwinConfigurations' \
-    --apply 'configs: builtins.head (builtins.attrNames configs)'
-)"
+configured_host="${requested_host:-$(scutil --get LocalHostName)}"
+[[ "${configured_host}" =~ ^[a-zA-Z0-9._-]+$ ]] || die \
+  "invalid host name: ${configured_host}"
+
+if ! configured_hostname="$(
+  "${nix_cmd[@]}" eval --raw \
+    "${FLAKE_REF}#darwinConfigurations.${configured_host}.config.networking.localHostName"
+)"; then
+  die "no Darwin configuration named ${configured_host}"
+fi
 configured_system="$(
   "${nix_cmd[@]}" eval --raw \
-    ".?submodules=1#darwinConfigurations.${configured_host}.config.nixpkgs.hostPlatform.system"
+    "${FLAKE_REF}#darwinConfigurations.${configured_host}.config.nixpkgs.hostPlatform.system"
 )"
 configured_user="$(
   "${nix_cmd[@]}" eval --raw \
-    ".?submodules=1#darwinConfigurations.${configured_host}.config.system.primaryUser"
+    "${FLAKE_REF}#darwinConfigurations.${configured_host}.config.system.primaryUser"
 )"
 
 [[ "${configured_system}" == "${detected_system}" ]] || die \
-  "the selected host uses ${configured_system}, but this Mac is ${detected_system}"
+  "host ${configured_host} selects ${configured_system}, but this Mac is ${detected_system}"
+[[ "${configured_hostname}" == "$(scutil --get LocalHostName)" ]] || die \
+  "host ${configured_host} configures ${configured_hostname}, but this Mac is $(scutil --get LocalHostName)"
 [[ "${configured_user}" == "$(id -un)" ]] || die \
-  "the selected host uses user ${configured_user}, but you are $(id -un)"
+  "host ${configured_host} selects user ${configured_user}, but you are $(id -un)"
 
-log "Validating the flake"
-"${nix_cmd[@]}" flake check '.?submodules=1' --all-systems
+log "Validating configuration ${configured_host}"
+"${nix_cmd[@]}" flake check "${FLAKE_REF}" --all-systems
 "${nix_cmd[@]}" eval --raw \
-  ".?submodules=1#darwinConfigurations.${configured_host}.config.system.build.toplevel.drvPath" >/dev/null
+  "${FLAKE_REF}#darwinConfigurations.${configured_host}.config.system.build.toplevel.drvPath" \
+  >/dev/null
+
+log "Building configuration ${configured_host}"
+"${nix_cmd[@]}" run "${FLAKE_REF}#darwin-rebuild" -- \
+  build --flake "${FLAKE_REF}#${configured_host}"
 
 log "Applying nix-darwin configuration ${configured_host}"
 printf '%s\n' "The initial system activation requires sudo."
 sudo "$(command -v nix)" --extra-experimental-features "${FLAKE_FEATURES}" \
-  run '.?submodules=1#darwin-rebuild' -- switch \
-  --flake ".?submodules=1#${configured_host}"
+  run "${FLAKE_REF}#darwin-rebuild" -- \
+  switch --flake "${FLAKE_REF}#${configured_host}"
 
 log "Bootstrap complete"
 printf '%s\n' \

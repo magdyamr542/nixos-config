@@ -14,7 +14,7 @@ macOS differences:
   an explicit host mapping and constructor.
 - [x] Use the same pinned Neovim submodule and Nix-managed plugin module as the
   Linux repository.
-- [ ] Align the Makefile and bootstrap interfaces while retaining macOS-specific
+- [x] Align the Makefile and bootstrap interfaces while retaining macOS-specific
   host detection, Nix installation, and nix-darwin activation.
 - [ ] Refresh the README and Neovim documentation for the resulting structure
   and workflow.
