@@ -8,6 +8,7 @@
   boot.initrd.availableKernelModules = [
     "ata_piix"
     "sd_mod"
+    "sr_mod"
   ];
 
   # includeDefaultModules = false above also skips upstream's default
@@ -16,8 +17,12 @@
   # without failing to reach /dev/mapper/control.
   boot.initrd.kernelModules = [ "dm_mod" ];
 
+  # This box's disk gets a fresh filesystem UUID on every fetch/instantiation
+  # (a hardcoded by-uuid path went stale and left root unable to mount at
+  # boot), so mount by device path instead, matching the box's own
+  # factory-generated hardware-configuration.nix.
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/39f94e4c-3e8e-4345-be27-724fdad22acd";
+    device = "/dev/sda1";
     fsType = "ext4";
     autoResize = true;
   };
