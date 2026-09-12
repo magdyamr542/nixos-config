@@ -5,6 +5,26 @@ and Homebrew to native nix-darwin and Home Manager declarations. Migrate in
 small batches, run `make check` and `make build`, then apply and test before
 removing the previous implementation.
 
+## Repository convergence before the combined migration
+
+Prepare this repository to merge into `nixos-config` without erasing genuine
+macOS differences:
+
+- [ ] Rename the generic host file and generate Darwin configurations through
+  an explicit host mapping and constructor.
+- [ ] Use the same pinned Neovim submodule and Nix-managed plugin module as the
+  Linux repository.
+- [ ] Align the Makefile and bootstrap interfaces while retaining macOS-specific
+  host detection, Nix installation, and nix-darwin activation.
+- [ ] Refresh the README and Neovim documentation for the resulting structure
+  and workflow.
+- [ ] Apply the completed preparation on the Mac and verify nix-darwin, Home
+  Manager, SSH, Git, Zsh, tmux, Neovim, and GUI applications.
+
+Keep `darwin/` and `home/gui-apps.nix` platform-specific. Do not change the
+nix-darwin or Home Manager state versions merely to match Linux; they are
+compatibility markers rather than package versions.
+
 ## SSH
 
 - [x] Replace the imported `dotfiles/ssh/config` with
