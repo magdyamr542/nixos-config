@@ -20,13 +20,9 @@ in
     diffutils
     fd
     google-chrome
-    insomnia
     kubectl
     neofetch
-    ngrok
     powerline
-    slack
-    zoom-us
     vagrant
     vokoscreen-ng
     gcc
@@ -55,32 +51,23 @@ in
     yq
     nixfmt-rfc-style
     maim
-    evince
     file
     vlc
-    brave
     gnumeric
     hypnotix
     lsof
-    dbeaver-bin
-    teams-for-linux
     awscli2
     libsecret
     openssl_legacy
     ffmpeg
-    rust-analyzer
     keyutils
     dig
     unixtools.xxd
     pgcli
     codex
-    opencode
     ripgrep
-    b3sum
     ghz
     kubectx
-    sops
-    k9s
     sound-theme-freedesktop
     claude-code
     (pkgs.buildEnv {
