@@ -12,14 +12,6 @@
   gitSettings = { };
 
   sshSettings = {
-    "github.com" = {
-      AddKeysToAgent = "yes";
-      IdentityFile = "~/.ssh/github";
-    };
-    "ls14-scm.cs.tu-dortmund.de" = {
-      AddKeysToAgent = "yes";
-      IdentityFile = "~/.ssh/gitlab_tu_dortmund";
-    };
     "*" = {
       ForwardAgent = false;
       AddKeysToAgent = "no";
