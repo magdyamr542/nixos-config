@@ -83,7 +83,7 @@
       source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
       source $HOME/.p10k.zsh
       source $HOME/.proot/project-root.sh
-      bindkey jj vi-cmd-mode 
+      bindkey jj vi-cmd-mode
       		'';
   };
 

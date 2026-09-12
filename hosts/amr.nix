@@ -3,6 +3,9 @@
   hostname = "amr";
   system = "x86_64-linux";
   nixosModule = ../nixos/hosts/linux.nix;
+  homeModule = ../home/linux;
+  homeDirectory = "/home/amr";
+  stateVersion = "23.05";
 
   fullName = "amr";
   email = "magdyamr542@gmail.com";

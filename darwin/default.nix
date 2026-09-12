@@ -73,6 +73,6 @@
     useUserPackages = true;
     backupFileExtension = "hm-backup";
     extraSpecialArgs = { inherit host; };
-    users.${host.username} = import ../home/darwin;
+    users.${host.username} = import ../home;
   };
 }

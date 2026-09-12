@@ -3,6 +3,9 @@
   hostname = "nixbox";
   system = "x86_64-linux";
   nixosModule = ../nixos/hosts/nixbox.nix;
+  homeModule = ../home/linux;
+  homeDirectory = "/home/vagrant";
+  stateVersion = "23.05";
 
   fullName = "Vagrant User";
   email = "magdyamr542@gmail.com";

@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 let
-  customGoPrograms = pkgs.callPackage ../packages { };
+  customGoPrograms = pkgs.callPackage ../../packages { };
 in
 {
 
@@ -72,7 +72,7 @@ in
     claude-code
     (pkgs.buildEnv {
       name = "my-bash-scripts";
-      paths = [ ../scripts ];
+      paths = [ ../../scripts ];
     })
   ];
 

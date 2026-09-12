@@ -4,6 +4,9 @@
   hostname = "LYNQTECH-W7CDXHWKLG";
   system = "aarch64-darwin";
   darwinModule = ../darwin;
+  homeModule = ../home/darwin;
+  homeDirectory = "/Users/amr.metwally";
+  stateVersion = "26.05";
 
   # Leave these empty if you do not want Git identity managed by Home Manager.
   fullName = "Amr Metwally";
