@@ -1,136 +1,119 @@
-# Declarative Linux workstation with NixOS
+# Declarative Linux and macOS configuration
 
-## Overview
+This repository manages NixOS and macOS hosts from one flake and one lock
+file. NixOS owns Linux system configuration, nix-darwin owns macOS system
+configuration, and Home Manager provides the shared user environment.
 
-This repository manages Linux machines as reproducible NixOS configurations:
+## Architecture
 
-- **NixOS** owns boot, hardware, users, networking, services, and software
-  needed system-wide.
-- **nixpkgs** is the pinned package collection used by both the system and the
-  configured user.
-- **Flakes** declare inputs and outputs in `flake.nix`; `flake.lock` pins exact
-  dependency revisions.
-- **Home Manager** is integrated into the NixOS generation and owns user
-  packages, programs, dotfiles, and desktop preferences.
+| Concern | Owner | Location |
+| --- | --- | --- |
+| Inputs and host outputs | Nix flake | `flake.nix`, `flake.lock` |
+| Host identity and module selection | Host records | `hosts/` |
+| Linux system and hardware | NixOS | `nixos/` |
+| macOS system preferences | nix-darwin | `darwin/` |
+| Shared user programs and dotfiles | Home Manager | `home/`, `dotfiles/` |
+| Platform-specific user behavior | Home Manager | `home/linux/`, `home/darwin/` |
+| Locally packaged programs | nixpkgs derivations | `packages/` |
 
-The ownership boundary is deliberate:
+All hosts use the same pinned nixpkgs and Home Manager revisions. Home
+Manager is integrated into each system generation, so a separate
+`home-manager switch` is neither required nor expected.
 
-| Concern                                           | Owner               | Location               |
-| ------------------------------------------------- | ------------------- | ---------------------- |
-| Host identity and architecture                    | Flake host records  | `hosts/`               |
-| User, locale, and shared Nix settings             | NixOS entry point   | `nixos/default.nix`    |
-| Hardware, boot, and host-only modules             | NixOS host modules  | `nixos/hosts/`         |
-| Desktop, networking, security, and virtualization | NixOS modules       | `nixos/modules/`       |
-| User packages and program configuration           | Home Manager        | `home/`                |
-| Plain files without a useful module               | Home Manager        | `dotfiles/`            |
-| Locally packaged programs                         | nixpkgs derivations | `packages/default.nix` |
+Available configurations:
 
-NixOS and Home Manager are applied together through one system configuration.
+| Output | Platform | User | Purpose |
+| --- | --- | --- | --- |
+| `amr` | `x86_64-linux` | `amr` | Physical NixOS workstation |
+| `nixbox` | `x86_64-linux` | `vagrant` | Disposable Vagrant test VM |
+| `LYNQTECH-W7CDXHWKLG` | `aarch64-darwin` | `amr.metwally` | macOS workstation |
 
-## Host configuration
+Review the matching file in `hosts/` before applying a configuration to a
+different machine. `system.stateVersion` and `home.stateVersion` are
+compatibility markers, not package versions; do not routinely change them.
 
-Each file under `hosts/` describes one flake output and points to its NixOS
-host module. The available configurations are:
+## Daily workflow
 
-- `amr`: the physical workstation, declared in `hosts/linux.nix`;
-- `nixbox`: the disposable VirtualBox test machine, declared in
-  `hosts/nixbox.nix`.
+The same commands work on Linux and macOS:
 
-Physical and VM hardware settings are deliberately separate. Never apply the
-`amr` output to nixbox or the `nixbox` output to the physical machine.
+```sh
+git pull
+make check
+make build
+make apply
+```
 
-`system.stateVersion` and `home.stateVersion` are compatibility markers, not
-package versions. Do not routinely change them during updates or migrations.
+The Makefile detects the operating system. It defaults to `hostname -s` on
+Linux and `scutil --get LocalHostName` on macOS. Override the selected output
+when needed:
 
-## Required secrets
+```sh
+make HOST=amr apply
+make HOST=nixbox build
+```
 
-Secrets deliberately live outside the Git checkout and are not copied into the
-Nix store. Never commit passwords, password hashes, private keys, or tokens.
+| Command | Purpose |
+| --- | --- |
+| `make format` | Format every tracked Nix file. |
+| `make check` | Evaluate all outputs and the selected host derivation. |
+| `make build` | Build the selected system without activating it. |
+| `make apply` | Build and activate the system and Home Manager generation. |
+| `make update` | Update `flake.lock`, then run all checks. |
 
-### User password
+Flake commands include `?submodules=1` because the Neovim configuration is a
+pinned Git submodule. See [docs/neovim.md](docs/neovim.md) for its ownership
+and update workflow.
 
-Create a yescrypt password hash for the configured Linux user:
+## Fresh NixOS installation
+
+Install NixOS first; this repository does not partition disks or install the
+base operating system. For hardware other than the configured workstation,
+generate and review an appropriate hardware module before switching.
+
+Clone the repository with its submodule:
+
+```sh
+git clone --recurse-submodules \
+  git@github.com:magdyamr542/nixos-config.git ~/nixos-config
+cd ~/nixos-config
+$EDITOR hosts/amr.nix
+```
+
+The physical host expects an external yescrypt password hash:
 
 ```sh
 sudo install -d -m 0700 /etc/nixos/secrets
-
 password_hash="$(nix shell nixpkgs#mkpasswd -c mkpasswd -m yescrypt)"
 printf '%s\n' "$password_hash" |
   sudo tee /etc/nixos/secrets/amr-password-hash >/dev/null
 unset password_hash
-
 sudo chown root:root /etc/nixos/secrets/amr-password-hash
 sudo chmod 0600 /etc/nixos/secrets/amr-password-hash
 ```
 
-NixOS reads this external file through `hashedPasswordFile` during activation.
-
-### SSH keys (optional)
-
-Install private SSH keys directly into the user's home directory:
+Then validate, build, and activate:
 
 ```sh
-install -d -m 0700 ~/.ssh
-install -m 0600 /path/to/github-private-key ~/.ssh/github
-install -m 0600 /path/to/gitlab-private-key ~/.ssh/gitlab_tu_dortmund
-```
-
-Public keys are tracked under `dotfiles/ssh/`. Private keys are never placed in
-the Nix store. Missing private keys do not prevent a build or activation; only
-the corresponding SSH connection is unavailable.
-
-## Fresh-machine preparation
-
-This repository configures an existing NixOS installation. It does not
-partition disks or install the operating system. Follow the NixOS installation
-manual first and ensure the target user exists or can be created by this
-configuration.
-
-This repository vendors the Neovim configuration
-(`home/programs/nvim-config`) as a git submodule — clone with
-`--recurse-submodules` below, or see [docs/neovim.md](docs/neovim.md) if you
-already cloned without it. That doc also covers how Neovim's config and
-plugins are managed, how to check installed plugin versions, and how to
-upgrade them.
-
-For different hardware, replace the committed hardware module with output
-generated on the target machine and review its diff carefully:
-
-```sh
-sudo nixos-generate-config --show-hardware-config \
-  > nixos/hardware-configuration.nix
-```
-
-Then, on the physical workstation:
-
-```sh
-git clone --recurse-submodules <your-repository-url> ~/nixos-config
-cd ~/nixos-config
-$EDITOR hosts/linux.nix
-# Provision the external secrets described above.
 ./scripts/bootstrap.sh --host amr
 ```
 
+The Linux bootstrap verifies the operating system, architecture, selected
+hostname, user, and required password-hash file before switching.
+
 ### Testing with nixbox
 
-The included `Vagrantfile` creates the supported disposable test machine with
-an 80 GB dynamically allocated primary disk. Its shared `/vagrant` folder is
-disabled because the repository is cloned directly into the guest:
+The included `Vagrantfile` creates an 80 GB disposable VirtualBox VM:
 
 ```sh
 vagrant up
 vagrant ssh
-git clone --recurse-submodules <your-repository-url> ~/nixos-config
+git clone --recurse-submodules \
+  git@github.com:magdyamr542/nixos-config.git ~/nixos-config
 cd ~/nixos-config
 ./scripts/bootstrap.sh --host nixbox
 ```
 
-The nixbox host leaves Vagrant's managed login key untouched, uses BIOS GRUB on `/dev/sda`,
-and enables VirtualBox guest support. It excludes the physical machine's EFI,
-disk, and VirtualBox-host configuration. It also reuses the existing `vagrant`
-account and therefore requires no external password hash.
-
-After a successful switch, leave the guest and test a real reboot:
+After a successful switch, test a real reboot from the host:
 
 ```sh
 exit
@@ -138,100 +121,82 @@ vagrant reload
 vagrant ssh
 ```
 
-The bootstrap script:
+The nixbox configuration preserves Vagrant's managed login key and does not
+require the workstation password-hash file.
 
-1. refuses to run outside Linux and NixOS;
-2. maps the detected CPU architecture to its Nix system name;
-3. checks the configured hostname, user, and architecture;
-4. checks required external files without displaying their contents;
-5. validates and builds the complete flake;
-6. applies the NixOS and Home Manager generation together.
+## Fresh macOS installation
 
-It must be run as the configured non-root user. Validation is unprivileged;
-secret checks and system activation produce explicit `sudo` prompts.
-
-## Applying changes
-
-The normal loop is:
+Install Apple's Command Line Tools first if Git is unavailable:
 
 ```sh
-git pull
-# Edit configuration.
-make check
-make apply                 # defaults to the current short hostname
-make HOST=nixbox apply     # explicit selection
+xcode-select --install
 ```
 
-`make apply` selects the current short hostname by default. `HOST` can override
-that selection, for example:
+Then clone, review the Mac host record, and bootstrap:
 
 ```sh
-make HOST=amr apply
+git clone --recurse-submodules \
+  git@github.com:magdyamr542/nixos-config.git ~/nixos-config
+cd ~/nixos-config
+$EDITOR hosts/macos.nix
+./scripts/bootstrap.sh
 ```
 
-Home Manager is part of this system generation. A separate
-`home-manager switch` is neither required nor expected, and the standalone
-`home-manager` command may not be installed in integrated mode.
+The macOS bootstrap verifies the architecture, LocalHostName, and user. It
+offers the official multi-user Nix installer when Nix is absent, then uses the
+pinned nix-darwin input for the first build and activation. Expect explicit
+administrator prompts. It does not uninstall Homebrew.
 
-Use `make build` to build without switching. It creates the usual ignored
-`result` link. A new terminal or login session may be needed after changes to
-shell paths and environment variables.
+If Nix was installed by Determinate Systems, do not use the installer path
+unchanged: first adapt nix-darwin's Nix management according to the current
+Determinate integration guidance.
 
-## Makefile commands
+Homebrew remains available after Nix profiles for tools and applications that
+have not been migrated. The remaining work is recorded in
+[the macOS migration tracker](docs/trackers/macos-nix-migration.md).
 
-| Command       | Purpose                                                           |
-| ------------- | ----------------------------------------------------------------- |
-| `make format` | Format every Git-tracked Nix file.                                |
-| `make check`  | Evaluate all outputs and the selected NixOS system derivation.    |
-| `make build`  | Build the selected generation without activating it.              |
-| `make apply`  | Build and switch the selected system and Home Manager generation. |
-| `make update` | Update `flake.lock`, then run the checks.                         |
+## Packages and configuration
 
-The formatter intentionally uses `git ls-files`; ignored files and nested
-working copies are never formatted accidentally.
+Portable program configuration belongs directly under `home/`. Git, Delta,
+SSH, tmux, and Neovim have one shared definition. Put substantial platform
+differences in `home/linux/` or `home/darwin/` rather than filling shared
+modules with operating-system conditions.
 
-## Adding and removing packages
+Add Linux user packages to `home/linux/packages.nix` and macOS user packages
+to `home/darwin/packages.nix`. Use a Home Manager program module when it can
+manage both the package and useful configuration. System-wide Linux packages
+belong in `nixos/modules/packages.nix`; macOS packages needed by every user
+belong in `darwin/default.nix`.
 
-Add normal user tools to `home/packages.nix`:
-
-```nix
-home.packages = with pkgs; [
-  ripgrep
-  kubectl
-];
-```
-
-Use a Home Manager program module when it also manages useful configuration.
-Git, Delta, Neovim, SSH, zsh, tmux, direnv, FZF, and VS Code are managed
-this way.
-
-Put packages in `nixos/modules/packages.nix` only when they are needed by every
-local user or for system administration. Local package derivations belong in
-`packages/default.nix`.
-
-After changing packages:
-
-```sh
-make check
-make apply
-```
-
-To find packages in the pinned nixpkgs input:
+Search the pinned package set or run a package temporarily:
 
 ```sh
 nix search nixpkgs ripgrep
-```
-
-For temporary tools:
-
-```sh
 nix shell nixpkgs#imagemagick
 nix run nixpkgs#cowsay -- "hello"
 ```
 
-## Updating inputs
+Prefer native Home Manager options. Keep plain files under `dotfiles/` only
+when no useful module exists. Managed files are symlinks into the immutable
+Nix store, so edit their repository sources and apply a new generation.
 
-Update all pinned inputs and validate the result:
+## Secrets and SSH keys
+
+Never commit passwords, password hashes, tokens, or private keys. Public SSH
+keys may be tracked under `dotfiles/ssh/`; private keys must be installed
+directly on the target machine with mode `0600`.
+
+The current host records refer to these optional private keys:
+
+- Linux: `~/.ssh/github` and `~/.ssh/gitlab_tu_dortmund`
+- macOS: `~/.ssh/lynqtech_github`
+
+Missing private keys do not prevent evaluation or activation. Only the
+corresponding SSH connection remains unavailable.
+
+## Updating and rollback
+
+Update all pinned inputs together:
 
 ```sh
 make update
@@ -239,81 +204,38 @@ make build
 make apply
 ```
 
-Review and commit the `flake.lock` diff. Moving to another NixOS release is a
-separate deliberate change: update the nixpkgs and Home Manager release URLs
-together, read their release notes, and do not automatically change state
-versions.
+Review and commit the `flake.lock` diff. Moving to another NixOS, Home Manager,
+or nix-darwin release is a separate deliberate change and should be tested on
+each platform.
 
-Neovim's plugins and its `nvim-config` submodule pointer are updated the same
-way; see [docs/neovim.md](docs/neovim.md).
-
-## Dotfiles
-
-Prefer native Home Manager options when a mature module exists. Store only
-configuration that benefits from being a plain file under `dotfiles/`.
-
-Examples:
-
-- `dotfiles/zsh/p10k.zsh` is linked as `~/.p10k.zsh`.
-- `dotfiles/tmux/` is exposed through XDG paths by `home/tmux.nix`.
-- `dotfiles/i3/`, `dotfiles/rofi/`, and the wallpaper are Linux desktop files
-  owned by `home/desktop.nix`.
-- `dotfiles/ssh/` contains public keys only.
-
-Home Manager symlinks managed files from the immutable Nix store. Edit the
-repository source and rebuild instead of editing generated files in `$HOME`.
-
-## Hardware and virtualization
-
-`nixos/hardware-configuration.nix` belongs to the physical machine.
-`nixos/hardware-nixbox.nix` belongs to the pinned nixbox image. Shared settings
-live under `nixos/modules/`, while host-only imports live under `nixos/hosts/`.
-
-`nixos/modules/virtualbox-guest.nix` currently enables VirtualBox guest
-additions and group membership. Keep it imported only while this host needs
-guest support. VirtualBox host support and the Vagrant network range are
-separate settings in `virtualization.nix`.
-
-## Rolling back
-
-List system generations:
+On NixOS, list generations or switch to the previous one with:
 
 ```sh
 sudo nixos-rebuild list-generations
-```
-
-Switch to the previous generation:
-
-```sh
 sudo nixos-rebuild switch --rollback
 ```
 
-The bootloader also exposes previous generations. For a durable source-level
-rollback, revert the bad Git or lock-file change and apply again; otherwise a
-later rebuild will recreate it. Do not manually delete store paths while
-recovering.
+On macOS:
 
-Because Home Manager is integrated, rolling back the NixOS generation also
-rolls back its user configuration.
+```sh
+darwin-rebuild --list-generations
+sudo darwin-rebuild --rollback
+```
+
+Also revert the source or lock-file change that caused the problem before a
+later rebuild. Do not manually delete Nix store paths while recovering.
 
 ## Repository workflow
 
 ```sh
-git pull
-
-# Make focused changes.
 make format
 make check
 make build
-make apply
 
-git add .
-git commit -m "Describe the configuration change"
+git add <focused-files>
+git commit
 git push
 ```
-
-Commit `flake.lock`. Do not commit `result` links, generated backups, private
-keys, password hashes, or other secrets.
 
 The optional pre-commit hook formats staged Nix files:
 
@@ -321,51 +243,33 @@ The optional pre-commit hook formats staged Nix files:
 git config core.hooksPath .githooks
 ```
 
+Commit `flake.lock`. Do not commit `result` links, generated backups, Vagrant
+state, or secrets.
+
 ## Repository structure
 
 ```text
 .
-├── flake.nix                 # inputs and output wiring
-├── flake.lock                # exact dependency revisions
-├── hosts/linux.nix           # host and user identity
-├── nixos/
-│   ├── default.nix           # base NixOS configuration
-│   ├── hardware-configuration.nix
-│   └── modules/              # focused system modules
+├── flake.nix                     shared inputs and output wiring
+├── flake.lock                    exact dependency revisions
+├── hosts/                        host identity and module selection
+├── nixos/                        Linux system and host modules
+├── darwin/                       macOS system configuration
 ├── home/
-│   ├── default.nix           # Home Manager entry point
-│   ├── packages.nix
-│   ├── git.nix
-│   ├── shell.nix
-│   ├── tmux.nix
-│   ├── desktop.nix
-│   └── programs/
-│       └── nvim-config/       # git submodule: magdyamr542/nvim
-├── dotfiles/                 # repository-managed plain files
-├── docs/
-│   ├── neovim.md             # Neovim config/plugin management details
-│   └── trackers/
-│       └── linux-structure-migration.md
-├── packages/default.nix      # custom package derivations
+│   ├── default.nix               shared Home Manager entry point
+│   ├── git.nix                   shared Git and Delta configuration
+│   ├── tmux.nix                  shared tmux configuration
+│   ├── programs/                 shared SSH, Neovim, and Linux-only VS Code
+│   ├── linux/                    Linux packages, shell, and desktop
+│   └── darwin/                   macOS packages, shell, and GUI apps
+├── dotfiles/                     repository-managed plain files
+├── packages/                     local package derivations
 ├── scripts/
-│   ├── bootstrap.sh
+│   ├── bootstrap.sh              platform-dispatching entry point
+│   ├── bootstrap-linux.sh
+│   ├── bootstrap-darwin.sh
 │   └── bin/
-├── Makefile
-└── Vagrantfile
+├── docs/                         guides and migration trackers
+├── Makefile                      shared daily workflow
+└── Vagrantfile                   disposable nixbox definition
 ```
-
-## Future macOS merge
-
-The Linux and macOS repositories now share the same conceptual boundaries and
-Makefile interface. During the eventual merge:
-
-- keep `nixos/` and `darwin/` platform-specific;
-- give every machine a distinct file under `hosts/`;
-- share portable modules from `home/`;
-- keep Linux desktop configuration isolated from macOS GUI configuration;
-- use platform conditions only where a genuinely shared module needs them;
-- generate one NixOS or nix-darwin configuration per host record.
-
-Do not combine the repositories by blindly choosing one version of similarly
-named Home Manager modules. Compare their behavior and merge shared settings
-module by module.

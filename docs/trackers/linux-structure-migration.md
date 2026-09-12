@@ -2,10 +2,10 @@
 
 ## Status
 
-The Linux repository migration to the standard layout is complete. This file
-now records the resulting architecture and the remaining preparation for an
-eventual merge with `nixos-config-macos`; it is no longer an implementation
-plan for the completed structural work.
+The Linux repository migration to the standard layout is complete. The macOS
+history and configuration are now being consolidated on `merge-migration`.
+This file records the resulting architecture and the remaining validation
+before the former repositories can be treated as one stable configuration.
 
 Validated on 2026-09-12:
 
@@ -21,33 +21,37 @@ The configuration flows through one integrated system generation:
 
 ```text
 flake.nix
-├── hosts/*.nix                    host identity and host module selection
-├── nixos/default.nix              shared NixOS and Home Manager integration
-│   ├── nixos/modules/*.nix        reusable Linux system concerns
-│   └── nixos/hosts/*.nix          hardware, boot, and host-only imports
-└── home/default.nix               Home Manager entry point
-    ├── home/*.nix                 focused user concerns
-    ├── home/programs/*.nix        program modules
+├── hosts/*.nix                    identity and platform module selection
+├── nixos/                         NixOS system and host modules
+├── darwin/                        nix-darwin system configuration
+└── home/default.nix               shared Home Manager entry point
+    ├── home/*.nix                 portable user concerns
+    ├── home/programs/*.nix        shared program modules
+    ├── home/linux/                Linux-only user concerns
+    ├── home/darwin/               macOS-only user concerns
     ├── dotfiles/                  plain files linked by Home Manager
     └── packages/default.nix       locally packaged software
 ```
 
-`flake.nix` maps two host records to complete NixOS configurations:
+`flake.nix` maps three host records to complete NixOS or nix-darwin
+configurations:
 
 | Output | User | Purpose | Host module |
 | --- | --- | --- | --- |
 | `amr` | `amr` | Physical workstation | `nixos/hosts/linux.nix` |
 | `nixbox` | `vagrant` | Disposable VirtualBox validation host | `nixos/hosts/nixbox.nix` |
+| `LYNQTECH-W7CDXHWKLG` | `amr.metwally` | macOS workstation | `darwin/default.nix` |
 
 Home Manager is embedded in each NixOS output. There is no independent
 `homeConfigurations` workflow, so `nixos-rebuild` applies the system and user
 configuration together.
 
-The Makefile selects the current short hostname by default and accepts an
-explicit `HOST`. Because Neovim is a Git submodule, flake commands use
-`?submodules=1`. `scripts/bootstrap.sh` validates the selected hostname,
-architecture, user, and optional password-hash requirement before checking,
-building, and switching the complete generation.
+The Makefile selects the current hostname and rebuild command for Linux or
+macOS and accepts an explicit `HOST`. Because Neovim is a Git submodule, flake
+commands use `?submodules=1`. `scripts/bootstrap.sh` dispatches to a platform
+bootstrap that validates the selected hostname, architecture, user, and any
+platform requirements before checking, building, and switching the complete
+generation.
 
 The nixbox path is intentionally host-specific. Vagrant provides an 80 GB
 primary disk, upgrades the base image from NixOS 24.05 to 26.05, and selects a
@@ -98,7 +102,8 @@ make the later merge smaller and less ambiguous.
   `ignored_files` layouts.
 - [x] Remove the unused legacy plaintext password file under
   `nixos/ignored_files/` without reading or copying its contents.
-- [x] Replace the generic flake description with a Linux-specific description.
+- [x] Replace the generic flake description with an accurate description of
+  the combined Linux and macOS configuration.
 - [x] Move this completed migration tracker from the repository root to
   `docs/trackers/linux-structure-migration.md`.
 - [x] Recreate the nixbox from scratch with `vagrant destroy` and `vagrant up`,
@@ -148,29 +153,30 @@ combined checkout.
 
 ### 4. Consolidate portable Home Manager modules
 
-- Compare and merge `home/git.nix`, `home/shell.nix`, `home/tmux.nix`, package
-  lists, and program aggregation one module at a time.
-- Keep Linux desktop/i3 declarations and macOS GUI application declarations in
+- [x] Share Git, Delta, SSH, tmux, Neovim, and program aggregation from one
+  Home Manager entry point.
+- [x] Keep Linux desktop/i3 declarations and macOS GUI application declarations in
   platform-specific modules.
-- Replace Linux's remaining raw `.zshrc` behavior with the already-audited
+- [ ] Replace Linux's remaining raw `.zshrc` behavior with the already-audited
   native Home Manager approach where practical.
 - [x] Use the same Git submodule and Nix-managed Neovim plugin module on both
   platforms. Mason remains responsible only for the configured LSP servers.
-- Use `lib.optionals pkgs.stdenv.isLinux` and `isDarwin` only for small package
-  differences; prefer separate modules for substantial platform behavior.
+- [x] Keep the substantially different package, desktop/GUI, and shell modules
+  in explicit `home/linux/` and `home/darwin/` trees. Use a platform condition
+  only for the small Linux-only VS Code import.
 
 Exit criterion: portable user behavior has one source of truth and each
 platform-specific module has a clear owner.
 
 ### 5. Unify workflows without hiding platform differences
 
-- Make the shared Makefile dispatch `apply` and `build` to `nixos-rebuild` or
+- [x] Make the shared Makefile dispatch `apply` and `build` to `nixos-rebuild` or
   `darwin-rebuild` based on the selected host.
-- Keep `check`, `update`, and `format` genuinely shared.
-- Either provide one platform-dispatching bootstrap script or retain small
+- [x] Keep `check`, `update`, and `format` genuinely shared.
+- [x] Provide one platform-dispatching bootstrap script with dedicated
   `bootstrap-linux.sh` and `bootstrap-darwin.sh` implementations behind a
   common documented interface.
-- Preserve Linux hostname/user/secret safety checks and macOS first-time Nix
+- [x] Preserve Linux hostname/user/secret safety checks and macOS first-time Nix
   and nix-darwin installation behavior.
 
 Exit criterion: the same documented commands work predictably on both systems
@@ -178,16 +184,16 @@ without weakening either platform's bootstrap checks.
 
 ### 6. Merge documentation and history
 
-- Build one README covering the shared architecture and normal workflow, with
+- [x] Build one README covering the shared architecture and normal workflow, with
   separate Linux, nixbox, and macOS installation sections.
-- Move active migration notes under `docs/trackers/` and retain completed
+- [x] Move active migration notes under `docs/trackers/` and retain completed
   trackers as historical context until the combined setup has been stable.
-- Import the second repository with history preserved, then resolve path
+- [x] Import the second repository with history preserved, then resolve path
   collisions intentionally instead of copying only its final tree.
 
 ### 7. Validate the combined repository
 
-- Run formatting and flake checks for all exposed systems.
+- [x] Run formatting and flake checks for all exposed systems.
 - Build every Linux and Darwin host output on a compatible machine or builder.
 - Recreate and bootstrap nixbox from an empty VM.
 - Apply on the physical Linux workstation and verify rollback.
