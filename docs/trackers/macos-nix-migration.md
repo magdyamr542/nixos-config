@@ -10,7 +10,7 @@ removing the previous implementation.
 Prepare this repository to merge into `nixos-config` without erasing genuine
 macOS differences:
 
-- [ ] Rename the generic host file and generate Darwin configurations through
+- [x] Rename the generic host file and generate Darwin configurations through
   an explicit host mapping and constructor.
 - [ ] Use the same pinned Neovim submodule and Nix-managed plugin module as the
   Linux repository.

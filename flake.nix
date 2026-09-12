@@ -25,22 +25,31 @@
       ...
     }:
     let
-      # This is the only host-specific file for the starter configuration.
-      host = import ./hosts/default.nix;
+      host = import ./hosts/macos.nix;
+      hosts = {
+        ${host.hostname} = host;
+      };
       supportedSystems = [
         "aarch64-darwin"
         "x86_64-darwin"
       ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      mkDarwinConfiguration =
+        currentHost:
+        nix-darwin.lib.darwinSystem {
+          specialArgs = {
+            inherit inputs;
+            host = currentHost;
+            outputs = self;
+          };
+          modules = [
+            ./darwin
+            home-manager.darwinModules.home-manager
+          ];
+        };
     in
     {
-      darwinConfigurations.${host.hostname} = nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit inputs host self; };
-        modules = [
-          ./darwin
-          home-manager.darwinModules.home-manager
-        ];
-      };
+      darwinConfigurations = nixpkgs.lib.mapAttrs (_: mkDarwinConfiguration) hosts;
 
       # Exposing this package lets bootstrap use the nix-darwin revision pinned
       # by this flake before darwin-rebuild has been installed globally.

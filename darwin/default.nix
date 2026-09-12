@@ -1,8 +1,8 @@
 {
   host,
   lib,
+  outputs,
   pkgs,
-  self,
   ...
 }:
 
@@ -54,7 +54,7 @@
 
   system = {
     primaryUser = host.username;
-    configurationRevision = self.rev or self.dirtyRev or null;
+    configurationRevision = outputs.rev or outputs.dirtyRev or null;
 
     # Conservative examples; remove either line to leave that preference alone.
     defaults = {

@@ -65,9 +65,9 @@ configured_user="$(
 )"
 
 [[ "${configured_system}" == "${detected_system}" ]] || die \
-  "hosts/default.nix selects ${configured_system}, but this Mac is ${detected_system}"
+  "the selected host uses ${configured_system}, but this Mac is ${detected_system}"
 [[ "${configured_user}" == "$(id -un)" ]] || die \
-  "hosts/default.nix selects user ${configured_user}, but you are $(id -un)"
+  "the selected host uses user ${configured_user}, but you are $(id -un)"
 
 log "Validating the flake"
 "${nix_cmd[@]}" flake check --all-systems
