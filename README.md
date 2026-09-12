@@ -342,13 +342,16 @@ git config core.hooksPath .githooks
 │   └── programs/
 │       └── nvim-config/       # git submodule: magdyamr542/nvim
 ├── dotfiles/                 # repository-managed plain files
-├── docs/neovim.md            # Neovim config/plugin management details
+├── docs/
+│   ├── neovim.md             # Neovim config/plugin management details
+│   └── trackers/
+│       └── linux-structure-migration.md
 ├── packages/default.nix      # custom package derivations
 ├── scripts/
 │   ├── bootstrap.sh
 │   └── bin/
 ├── Makefile
-└── migration.md
+└── Vagrantfile
 ```
 
 ## Future macOS merge
