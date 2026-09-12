@@ -14,17 +14,19 @@ The ownership boundary is deliberate:
 
 | Concern | Owner | Location |
 | --- | --- | --- |
-| Host identity and CPU architecture | Flake host definition | `hosts/default.nix` |
+| Host identity and CPU architecture | Flake host definition | `hosts/macos.nix` |
 | Nix daemon, macOS defaults, all-user packages | nix-darwin | `darwin/default.nix` |
 | Developer CLI packages | Home Manager | `home/packages.nix` |
 | Git, shell, editor, terminal configuration | Home Manager modules | `home/*.nix`, `home/programs/` |
 | Plain files without a module | Home Manager | `dotfiles/` and `home/default.nix` |
 
-Only `vim` is currently system-wide. The normal developer tool set is user-scoped. Homebrew is not enabled and is not required for this configuration.
+Only `vim` is currently system-wide. The normal developer tool set is
+user-scoped. nix-darwin does not manage Homebrew, but the existing installation
+is retained for applications that have not moved to Nix yet.
 
 ## Before the first run
 
-Edit `hosts/default.nix`. It is the single source of truth for:
+Edit `hosts/macos.nix`. It is the single source of truth for:
 
 ```nix
 {
@@ -51,21 +53,31 @@ xcode-select --install
 After that dialog completes:
 
 ```bash
-git clone <your-repository-url> ~/nix-macos
+git clone --recurse-submodules <your-repository-url> ~/nix-macos
 cd ~/nix-macos
-$EDITOR hosts/default.nix
+$EDITOR hosts/macos.nix
 ./scripts/bootstrap.sh
 ```
+
+If the repository was cloned without submodules, initialize them before
+building:
+
+```bash
+git submodule update --init --recursive
+```
+
+See [docs/neovim.md](docs/neovim.md) for ownership and update details.
 
 The script:
 
 1. refuses to run outside macOS;
 2. maps `arm64` or `x86_64` to the matching Nix system;
-3. checks the selected user and architecture;
-4. uses the official multi-user Nix installer if Nix is absent;
-5. enables flakes for bootstrap commands;
-6. validates the flake;
-7. runs the pinned nix-darwin activation.
+3. selects the Mac's LocalHostName, with an optional `--host` override;
+4. checks that the configuration, hostname, user, and architecture match;
+5. uses the official multi-user Nix installer if Nix is absent;
+6. enables flakes for bootstrap commands;
+7. validates and builds the complete configuration;
+8. runs the pinned nix-darwin activation.
 
 The Nix installer explains its system changes and asks for confirmation. Nix installation and nix-darwin activation require administrator access, so expect explicit `sudo` prompts. The script does not delete existing files or uninstall Homebrew. Home Manager moves a colliding managed file to a sibling ending in `.hm-backup`; if that backup already exists, activation stops safely for manual review.
 
@@ -82,13 +94,15 @@ make check
 make apply
 ```
 
-`make apply` reads the hostname from the flake and runs the equivalent of:
+`make apply` uses `scutil --get LocalHostName` and runs the equivalent of:
 
 ```bash
-sudo darwin-rebuild switch --flake .#<hostname>
+sudo darwin-rebuild switch --flake '.?submodules=1#<hostname>'
 ```
 
-Use `make build` to build without switching. A new terminal may be needed after changes to shell paths or environment variables.
+Override selection explicitly with `make apply HOST=<hostname>`. Use
+`make build` to build without switching. A new terminal may be needed after
+changes to shell paths or environment variables.
 
 ## Adding and removing packages
 
@@ -161,7 +175,7 @@ darwin-rebuild --list-generations
 If the current generation is usable enough to invoke nix-darwin, switch to the previous one:
 
 ```bash
-sudo darwin-rebuild rollback
+sudo darwin-rebuild --rollback
 ```
 
 For a durable source-level rollback, also revert the bad Git/lock-file change and apply again; otherwise a later rebuild will recreate it. The system profile generations can also be inspected with:
@@ -192,7 +206,7 @@ The module installs the program and generates its configuration together.
 Store the source in this repository, then add an entry to `home/default.nix`:
 
 ```nix
-home.file.".tmux.conf".source = ../dotfiles/tmux.conf;
+xdg.configFile."tmux/tmux.conf".source = ../dotfiles/tmux/tmux.conf;
 ```
 
 The included ripgrep example uses the XDG equivalent:
@@ -220,12 +234,13 @@ Never commit tokens, credentials, SSH private keys, or other secrets. `programs.
 
 To add a second Mac without copying shared modules:
 
-1. create `hosts/work-macbook.nix` with the same fields as `hosts/default.nix`;
-2. import both host records in `flake.nix`;
-3. generate one `darwinConfigurations.<hostname>` entry per record using the existing module list;
+1. create `hosts/work-macbook.nix` with the same fields as `hosts/macos.nix`;
+2. import it into the `hosts` mapping in `flake.nix` using its hostname;
+3. let `mkDarwinConfiguration` generate its complete configuration;
 4. apply the matching hostname on each Mac.
 
-Shared system behavior remains in `darwin/`, and shared user behavior remains in `home/`. Add a host-specific module to only that host's `modules` list when the machines genuinely differ. The starter intentionally keeps the one-host expression explicit; introduce a small mapping only when the second host exists.
+Shared system behavior remains in `darwin/`, and shared user behavior remains
+in `home/`. Add a host-specific module only when machines genuinely differ.
 
 ## Optional GUI applications and Homebrew
 
@@ -268,24 +283,33 @@ Commit `flake.lock`. Do not commit `result` build links, `.DS_Store`, generated 
 .
 ├── flake.nix                 # pinned inputs and host output wiring
 ├── flake.lock                # exact dependency revisions
-├── hosts/default.nix         # username, hostname, architecture, Git identity
+├── hosts/macos.nix           # username, hostname, architecture, Git identity
 ├── darwin/default.nix        # system and conservative macOS settings
 ├── home/
-│   ├── default.nix           # Home Manager entry point and plain dotfile example
+│   ├── default.nix           # Home Manager entry point
 │   ├── packages.nix          # user package list
 │   ├── git.nix
+│   ├── gui-apps.nix          # Nix-managed macOS applications
 │   ├── shell.nix
-│   └── programs/default.nix
-├── dotfiles/ripgrep/ripgreprc
-├── dotfiles/nvim/init.lua    # imported legacy Neovim entry point
-├── dotfiles/zsh/functions.zsh
-├── dotfiles/zsh/p10k.zsh
+│   ├── tmux.nix
+│   └── programs/
+│       ├── default.nix
+│       ├── neovim.nix        # Nix-managed plugins and tools
+│       └── nvim-config/      # pinned Git submodule
+├── dotfiles/
+│   ├── ripgrep/ripgreprc
+│   ├── tmux/
+│   └── zsh/
+├── docs/
+│   ├── neovim.md
+│   └── trackers/macos-nix-migration.md
 ├── scripts/bootstrap.sh
+├── .gitmodules
 └── Makefile
 ```
 
 The SSH and Zsh configuration has been migrated to native Home Manager
 options. Powerlevel10k and the custom shell functions remain repository-managed
 files because they do not benefit from being expanded into Nix expressions.
-Neovim is still a temporary migration input; migrate it to an appropriate Home
-Manager/Nix module before removing the legacy entry point.
+Neovim configuration is pinned as a submodule while Home Manager owns plugins
+and supporting tools; see [docs/neovim.md](docs/neovim.md).

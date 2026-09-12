@@ -10,7 +10,8 @@ Neovim configuration and plugin installation have separate owners:
 The Lua configuration is pinned as a Git submodule at the same revision used by
 the Linux repository. Home Manager links it to `~/.config/nvim` and provides a
 wrapped Neovim with the declared plugins on its runtime path. Packer and Mason
-do not install plugins or tools at runtime.
+do not install plugins at runtime. Mason still installs the LSP servers listed
+in `lua/lsp.lua`, matching the current Linux setup.
 
 The Lua configuration still depends on the legacy `nvim-treesitter` API and
 the archived `playground` extension. The 26.05 nixpkgs snapshot no longer

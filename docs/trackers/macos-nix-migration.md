@@ -16,7 +16,7 @@ macOS differences:
   Linux repository.
 - [x] Align the Makefile and bootstrap interfaces while retaining macOS-specific
   host detection, Nix installation, and nix-darwin activation.
-- [ ] Refresh the README and Neovim documentation for the resulting structure
+- [x] Refresh the README and Neovim documentation for the resulting structure
   and workflow.
 - [ ] Apply the completed preparation on the Mac and verify nix-darwin, Home
   Manager, SSH, Git, Zsh, tmux, Neovim, and GUI applications.
@@ -133,7 +133,8 @@ type -a delta
 - [x] Pin `magdyamr542/nvim` as the same Git submodule revision used by the
   Linux repository.
 - [x] Move Neovim into `home/programs/neovim.nix` and install its plugins and
-  supporting tools through Nix instead of Packer or Mason.
+  core tools through Nix instead of Packer. Mason retains ownership of the LSP
+  servers listed by the shared Lua configuration.
 - [x] Make every flake reference include submodule content.
 - [ ] Apply the new generation and confirm Neovim starts, plugins load, and
   required language tooling remains available.
@@ -161,6 +162,6 @@ type -a delta
   editor) — skip any future attempt to migrate this one.
 - [ ] Decide whether retained formulae/casks should be declared through
   nix-darwin's Homebrew module.
-- [ ] Correct the README rollback example to `sudo darwin-rebuild --rollback`.
+- [x] Correct the README rollback example to `sudo darwin-rebuild --rollback`.
 - [ ] After an extended stable period, review old nix-darwin generations and
   `.hm-backup` files. Do not delete rollback points or backups prematurely.
