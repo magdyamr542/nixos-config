@@ -30,6 +30,7 @@ let
   playground = pkgs.vimUtils.buildVimPlugin {
     pname = "playground";
     version = "2023-09-15";
+    dependencies = [ nvim-treesitter ];
     src = pkgs.fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "playground";
