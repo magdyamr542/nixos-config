@@ -7,9 +7,9 @@ Neovim's Lua configuration and its plugin installation are deliberately managed 
 | Lua config (keymaps, plugin setup, …) | `magdyamr542/nvim` (upstream repo) | `home/programs/nvim-config/` (submodule) |
 | Plugin installation and versions      | Home Manager                       | `home/programs/neovim.nix`               |
 
-This split replaced an earlier setup where `packer.nvim` installed plugins by cloning whatever branch each plugin defaulted to on GitHub. That floated
-silently until `nvim-treesitter`'s default branch moved to a new API and broke `nvim-yati` and `playground`, which still depended on the old one. Pinning
-plugin installation through nixpkgs instead of packer fixes that class of problem: plugin versions only move when you deliberately update this repo's `nixpkgs` pin.
+This split replaced an earlier setup where `packer.nvim` installed plugins by
+cloning whatever branch each plugin defaulted to on GitHub. Plugin versions now
+move only when the repository's nixpkgs pin moves.
 
 ## How config loading works
 
@@ -17,8 +17,12 @@ plugin installation through nixpkgs instead of packer fixes that class of proble
    sourced from the vendored `home/programs/nvim-config` submodule. It's read-only — you edit the submodule checkout, not files under
    `~/.config/nvim`, and changes take a `make apply` to show up.
 2. `programs.neovim.enable = true` produces a wrapped `nvim` binary. Its `extraConfig` does `:luafile ~/.config/nvim/init.lua`, which is what actually loads the symlinked config from step 1.
-3. `programs.neovim.plugins` is a separate list of plugin derivations. Home Manager builds a packdir (`pack/myNeovimPackages/start/<plugin>`) out of
-   them and bakes it into the same wrapped `nvim` binary's runtimepath. This is independent of `~/.config/nvim` — plugin code never lives there.
+3. `programs.neovim.plugins` is a separate list of plugin derivations. Home
+   Manager builds a packdir from them and adds it to Neovim's package path.
+   This is independent of `~/.config/nvim`; plugin code never lives there.
+4. `nvim-treesitter.withPlugins` builds the selected parsers and matching
+   queries with Nix. `:TSInstall` and `:TSUpdate` are not part of the normal
+   workflow and must not create a second mutable parser set.
 
 So the Lua files under `lua/plugins.lua` in the nvim-config submodule no
 longer install anything; they exist only so the other config modules can keep
@@ -45,11 +49,10 @@ Where those versions come from:
 - **Most plugins**: pinned transitively through `flake.lock`'s `nixpkgs` input.
   `pkgs.vimPlugins.<name>` is nixpkgs' snapshot of each plugin, so versions move
   only when the repository's nixpkgs input moves.
-- **`nvim-treesitter` and `playground`**: pinned directly to the compatible
-  legacy revisions required by the current Lua configuration. The 26.05
-  nixpkgs snapshot archives `playground` and follows a newer treesitter API.
-- **`nvim-yati`**: not packaged in nixpkgs, so it is also pinned directly in
-  `neovim.nix` with an explicit revision and fixed-output hash.
+- **Treesitter**: the plugin, grammar revisions, compiled parsers, and queries
+  come from the same nixpkgs snapshot through `nvim-treesitter.withPlugins`.
+  Neovim 0.12 provides highlighting, `nvim-treesitter` provides indentation,
+  and the built-in `:InspectTree` command replaces the archived playground.
 
 ## Upgrading plugins
 
@@ -61,19 +64,24 @@ make update      # nix flake update + make check
 make apply
 ```
 
-**Directly pinned plugins** (`nvim-treesitter`, `playground`, and `nvim-yati`)
-must be updated by editing their revision and hash in `home/programs/neovim.nix`.
-For example:
-
-```sh
-git ls-remote https://github.com/yioneko/nvim-yati HEAD   # get the latest commit
-```
-
-Then update `rev` in `neovim.nix`'s `nvim-yati` derivation, set `hash = lib.fakeHash;` temporarily, run `make build`, and Nix's hash-mismatch
-error will print the correct hash to paste in.
-
 If you need one specific nixpkgs-sourced plugin newer than what the pinned `nixpkgs` has, without bumping everything, override just that plugin's `src`
 with `overrideAttrs` in `neovim.nix` instead of waiting for the next `make update`.
+
+## Removing legacy Packer state
+
+Home Manager does not own files created by the former Packer setup. Before
+testing this configuration on a machine that used it, move or delete these
+paths so Neovim cannot load two plugin and parser generations:
+
+```sh
+~/.config/nvim/plugin/packer_compiled.lua
+~/.local/share/nvim/site/pack/packer
+~/.local/share/nvim/site/parser
+~/.local/share/nvim/site/parser-info
+```
+
+After applying, `:checkhealth vim.treesitter` should list Nix parsers under
+`pack/hm/start/nvim-treesitter-grammars` and no paths under `pack/packer`.
 
 ## Pulling in upstream nvim-config changes
 
