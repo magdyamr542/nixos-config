@@ -9,7 +9,6 @@
     ".config/i3/config".source = ../../dotfiles/i3/config;
     ".config/rofi/config.rasi".source = ../../dotfiles/rofi/config.rasi;
     ".config/rofi/dracula.rasi".source = ../../dotfiles/rofi/dracula.rasi;
-    ".config/rofi/nord.rasi".source = ../../dotfiles/rofi/nord.rasi;
     ".scripts/i3/screenshot.sh".source = ../../dotfiles/i3/scripts/screenshot.sh;
     ".scripts/i3/update-brithness.sh".source = ../../dotfiles/i3/scripts/update-brithness.sh;
     ".scripts/i3/update-volume.sh".source = ../../dotfiles/i3/scripts/update-volume.sh;

@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 let
   customGoPrograms = pkgs.callPackage ../../packages { };
 in
@@ -7,11 +7,7 @@ in
   # User packages
   home.packages = with pkgs; [
     nerd-fonts.meslo-lg
-    zsh-autosuggestions
     zsh-completions
-    zsh-powerlevel10k
-    zsh-syntax-highlighting
-    zsh-history-substring-search
     alacritty
     arandr
     unzip

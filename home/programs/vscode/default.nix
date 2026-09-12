@@ -1,9 +1,6 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 let
-  extensions = (import ./extensions.nix) {
-    pkgs = pkgs;
-    lib = lib;
-  };
+  extensions = import ./extensions.nix { inherit pkgs; };
 in
 {
   programs.vscode = {
@@ -57,7 +54,6 @@ in
         pkgs.vscode-extensions.bbenoist.nix
         pkgs.vscode-extensions.zxh404.vscode-proto3
         pkgs.vscode-extensions.rust-lang.rust-analyzer
-        pkgs.vscode-extensions.bbenoist.nix
       ]
       ++ [
         extensions.ms-vscode.remote-explorer

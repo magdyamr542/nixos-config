@@ -157,8 +157,8 @@ combined checkout.
   Home Manager entry point.
 - [x] Keep Linux desktop/i3 declarations and macOS GUI application declarations in
   platform-specific modules.
-- [ ] Replace Linux's remaining raw `.zshrc` behavior with the already-audited
-  native Home Manager approach where practical.
+- [x] Replace Linux's remaining raw `.zshrc` behavior with Home Manager-native
+  Zsh configuration and remove the obsolete file.
 - [x] Use the same Git submodule and Nix-managed Neovim plugin module on both
   platforms. Mason remains responsible only for the configured LSP servers.
 - [x] Keep the substantially different package, desktop/GUI, and shell modules
