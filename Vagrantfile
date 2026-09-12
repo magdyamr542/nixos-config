@@ -10,6 +10,8 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |virtualbox|
     virtualbox.cpus = 4
     virtualbox.memory = 8192
+    # The box ships with vboxvga; VirtualBox recommends vmsvga for modern guests.
+    virtualbox.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
   end
 
   # Upgrade NixOS from 24.05 to 25.11 on first boot
