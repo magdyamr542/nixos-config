@@ -10,6 +10,12 @@
     "sd_mod"
   ];
 
+  # includeDefaultModules = false above also skips upstream's default
+  # `kernelModules = [ "dm_mod" ]`, so the initrd never loads the
+  # device-mapper driver. Re-add it explicitly so udev can probe disks
+  # without failing to reach /dev/mapper/control.
+  boot.initrd.kernelModules = [ "dm_mod" ];
+
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/39f94e4c-3e8e-4345-be27-724fdad22acd";
     fsType = "ext4";
