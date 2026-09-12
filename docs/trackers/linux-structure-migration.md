@@ -111,23 +111,23 @@ make the later merge smaller and less ambiguous.
 
 - [x] Upgrade Linux to the 26.05 nixpkgs and Home Manager release used by
   macOS.
-- Keep nix-darwin as a Darwin-only input and expose formatters for every
+- [x] Keep nix-darwin as a Darwin-only input and expose formatters for every
   supported Linux and Darwin architecture.
-- Decide whether input updates remain global or can be tested per platform
-  before the shared lock file advances.
+- [x] Use one shared nixpkgs and Home Manager input so updates are validated
+  globally before the lock file advances.
 
 Exit criterion: both repositories evaluate against the intended common
 nixpkgs and Home Manager revisions before any source trees are merged.
 
 ### 2. Define a common host schema
 
-- Give every host its own clearly named file rather than keeping the macOS host
-  in `hosts/default.nix`.
-- Standardize the portable fields: `username`, `hostname`, `system`,
+- [x] Give every host its own clearly named file rather than keeping the macOS
+  host in `hosts/default.nix`.
+- [x] Standardize the portable fields: `username`, `hostname`, `system`,
   `fullName`, and `email`.
-- Keep OS-only fields explicit, such as `nixosModule`, Linux groups and password
-  sources, or future Darwin-specific system modules.
-- Add small constructors such as `mkNixosConfiguration` and
+- [x] Keep OS-only fields explicit, such as `nixosModule`, `darwinModule`,
+  Linux groups, and password sources.
+- [x] Add small constructors such as `mkNixosConfiguration` and
   `mkDarwinConfiguration` instead of forcing both systems through one overly
   generic function.
 
@@ -136,12 +136,12 @@ without duplicated identity values.
 
 ### 3. Merge the flake entry point
 
-- Export `nixosConfigurations` and `darwinConfigurations` from one flake.
-- Preserve integrated Home Manager on both platforms.
-- Preserve the macOS `darwin-rebuild` package output needed for first-time
+- [x] Export `nixosConfigurations` and `darwinConfigurations` from one flake.
+- [x] Preserve integrated Home Manager on both platforms.
+- [x] Preserve the macOS `darwin-rebuild` package output needed for first-time
   bootstrap.
-- Preserve submodule-aware evaluation while the Neovim configuration remains a
-  Git submodule.
+- [x] Preserve submodule-aware evaluation while the Neovim configuration
+  remains a Git submodule.
 
 Exit criterion: `nix flake check --all-systems` evaluates every host from the
 combined checkout.
@@ -154,9 +154,8 @@ combined checkout.
   platform-specific modules.
 - Replace Linux's remaining raw `.zshrc` behavior with the already-audited
   native Home Manager approach where practical.
-- Resolve the Neovim difference deliberately: Linux uses a Git submodule with
-  Nix-managed plugins, while macOS currently fetches a pinned source and still
-  relies on Packer/Mason for part of plugin/tool installation.
+- [x] Use the same Git submodule and Nix-managed Neovim plugin module on both
+  platforms. Mason remains responsible only for the configured LSP servers.
 - Use `lib.optionals pkgs.stdenv.isLinux` and `isDarwin` only for small package
   differences; prefer separate modules for substantial platform behavior.
 
