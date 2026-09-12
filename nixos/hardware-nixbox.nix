@@ -13,7 +13,13 @@
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/39f94e4c-3e8e-4345-be27-724fdad22acd";
     fsType = "ext4";
+    autoResize = true;
   };
+
+  # Grow the root partition and filesystem to fill the Vagrant-resized 80GB
+  # disk automatically on every boot, instead of running growpart/resize2fs
+  # by hand.
+  boot.growPartition = true;
 
   networking.useDHCP = lib.mkDefault true;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
