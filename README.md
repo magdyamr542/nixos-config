@@ -86,6 +86,13 @@ partition disks or install the operating system. Follow the NixOS installation
 manual first and ensure the target user exists or can be created by this
 configuration.
 
+This repository vendors the Neovim configuration
+(`home/programs/nvim-config`) as a git submodule — clone with
+`--recurse-submodules` below, or see [docs/neovim.md](docs/neovim.md) if you
+already cloned without it. That doc also covers how Neovim's config and
+plugins are managed, how to check installed plugin versions, and how to
+upgrade them.
+
 For different hardware, replace the committed hardware module with output
 generated on the target machine and review its diff carefully:
 
@@ -97,7 +104,7 @@ sudo nixos-generate-config --show-hardware-config \
 Then, on the physical workstation:
 
 ```sh
-git clone <your-repository-url> ~/nixos-config
+git clone --recurse-submodules <your-repository-url> ~/nixos-config
 cd ~/nixos-config
 $EDITOR hosts/linux.nix
 # Provision the external secrets described above.
@@ -113,7 +120,7 @@ disabled because the repository is cloned directly into the guest:
 ```sh
 vagrant up
 vagrant ssh
-git clone <your-repository-url> ~/nixos-config
+git clone --recurse-submodules <your-repository-url> ~/nixos-config
 cd ~/nixos-config
 ./scripts/bootstrap.sh --host nixbox
 ```
@@ -237,6 +244,9 @@ separate deliberate change: update the nixpkgs and Home Manager release URLs
 together, read their release notes, and do not automatically change state
 versions.
 
+Neovim's plugins and its `nvim-config` submodule pointer are updated the same
+way; see [docs/neovim.md](docs/neovim.md).
+
 ## Dotfiles
 
 Prefer native Home Manager options when a mature module exists. Store only
@@ -330,7 +340,9 @@ git config core.hooksPath .githooks
 │   ├── tmux.nix
 │   ├── desktop.nix
 │   └── programs/
+│       └── nvim-config/       # git submodule: magdyamr542/nvim
 ├── dotfiles/                 # repository-managed plain files
+├── docs/neovim.md            # Neovim config/plugin management details
 ├── packages/default.nix      # custom package derivations
 ├── scripts/
 │   ├── bootstrap.sh

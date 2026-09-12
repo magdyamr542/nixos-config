@@ -3,14 +3,14 @@
 HOST ?= $(shell hostname -s)
 
 apply:
-	sudo nixos-rebuild switch --flake .\#$(HOST)
+	sudo nixos-rebuild switch --flake '.?submodules=1#'$(HOST)
 
 build:
-	nixos-rebuild build --flake .\#$(HOST)
+	nixos-rebuild build --flake '.?submodules=1#'$(HOST)
 
 check:
-	nix flake check --all-systems
-	nix eval --raw .\#nixosConfigurations.$(HOST).config.system.build.toplevel.drvPath
+	nix flake check '.?submodules=1' --all-systems
+	nix eval --raw '.?submodules=1#'nixosConfigurations.$(HOST).config.system.build.toplevel.drvPath
 
 update:
 	nix flake update

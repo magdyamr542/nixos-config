@@ -72,17 +72,17 @@ configured_host="${requested_host:-$(hostname -s)}"
 
 if ! configured_hostname="$(
   "${nix_cmd[@]}" eval --raw \
-    ".#nixosConfigurations.${configured_host}.config.networking.hostName"
+    ".?submodules=1#nixosConfigurations.${configured_host}.config.networking.hostName"
 )"; then
   die "no NixOS configuration named ${configured_host}"
 fi
 configured_system="$(
   "${nix_cmd[@]}" eval --raw \
-    ".#nixosConfigurations.${configured_host}.config.nixpkgs.hostPlatform.system"
+    ".?submodules=1#nixosConfigurations.${configured_host}.config.nixpkgs.hostPlatform.system"
 )"
 configured_user="$(
   "${nix_cmd[@]}" eval --raw \
-    ".#nixosConfigurations.${configured_host}.config.home-manager.users" \
+    ".?submodules=1#nixosConfigurations.${configured_host}.config.home-manager.users" \
     --apply 'users: builtins.head (builtins.attrNames users)'
 )"
 
@@ -95,7 +95,7 @@ configured_user="$(
 
 password_hash_file="$(
   "${nix_cmd[@]}" eval --raw \
-    ".#nixosConfigurations.${configured_host}.config.users.users.${configured_user}.hashedPasswordFile" \
+    ".?submodules=1#nixosConfigurations.${configured_host}.config.users.users.${configured_user}.hashedPasswordFile" \
     --apply 'value: if value == null then "" else toString value'
 )"
 if [[ -n "${password_hash_file}" ]]; then
@@ -105,20 +105,20 @@ if [[ -n "${password_hash_file}" ]]; then
 fi
 
 log "Validating configuration ${configured_host}"
-"${nix_cmd[@]}" flake check --all-systems
+"${nix_cmd[@]}" flake check '.?submodules=1' --all-systems
 "${nix_cmd[@]}" eval --raw \
-  ".#nixosConfigurations.${configured_host}.config.system.build.toplevel.drvPath" \
+  ".?submodules=1#nixosConfigurations.${configured_host}.config.system.build.toplevel.drvPath" \
   >/dev/null
 
 log "Building configuration ${configured_host}"
 nixos-rebuild build \
   --option experimental-features "${FLAKE_FEATURES}" \
-  --flake ".#${configured_host}"
+  --flake ".?submodules=1#${configured_host}"
 
 log "Applying configuration ${configured_host}"
 sudo "$(command -v nixos-rebuild)" switch \
   --option experimental-features "${FLAKE_FEATURES}" \
-  --flake ".#${configured_host}"
+  --flake ".?submodules=1#${configured_host}"
 
 log "Bootstrap complete"
 printf '%s\n' \

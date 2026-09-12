@@ -1,0 +1,3 @@
+[submodule "home/programs/nvim-config"]
+	path = home/programs/nvim-config
+	url = https://github.com/magdyamr542/nvim

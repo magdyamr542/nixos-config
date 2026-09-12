@@ -81,6 +81,7 @@ in
     kubectx
     sops
     k9s
+    sound-theme-freedesktop
     claude-code
     (pkgs.buildEnv {
       name = "my-bash-scripts";
