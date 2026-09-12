@@ -52,16 +52,16 @@ cd "${REPO_DIR}"
 nix_cmd=(nix --extra-experimental-features "${FLAKE_FEATURES}")
 
 configured_host="$(
-  "${nix_cmd[@]}" eval --raw .#darwinConfigurations \
+  "${nix_cmd[@]}" eval --raw '.?submodules=1#darwinConfigurations' \
     --apply 'configs: builtins.head (builtins.attrNames configs)'
 )"
 configured_system="$(
   "${nix_cmd[@]}" eval --raw \
-    ".#darwinConfigurations.${configured_host}.config.nixpkgs.hostPlatform.system"
+    ".?submodules=1#darwinConfigurations.${configured_host}.config.nixpkgs.hostPlatform.system"
 )"
 configured_user="$(
   "${nix_cmd[@]}" eval --raw \
-    ".#darwinConfigurations.${configured_host}.config.system.primaryUser"
+    ".?submodules=1#darwinConfigurations.${configured_host}.config.system.primaryUser"
 )"
 
 [[ "${configured_system}" == "${detected_system}" ]] || die \
@@ -70,14 +70,15 @@ configured_user="$(
   "the selected host uses user ${configured_user}, but you are $(id -un)"
 
 log "Validating the flake"
-"${nix_cmd[@]}" flake check --all-systems
+"${nix_cmd[@]}" flake check '.?submodules=1' --all-systems
 "${nix_cmd[@]}" eval --raw \
-  ".#darwinConfigurations.${configured_host}.config.system.build.toplevel.drvPath" >/dev/null
+  ".?submodules=1#darwinConfigurations.${configured_host}.config.system.build.toplevel.drvPath" >/dev/null
 
 log "Applying nix-darwin configuration ${configured_host}"
 printf '%s\n' "The initial system activation requires sudo."
 sudo "$(command -v nix)" --extra-experimental-features "${FLAKE_FEATURES}" \
-  run .#darwin-rebuild -- switch --flake ".#${configured_host}"
+  run '.?submodules=1#darwin-rebuild' -- switch \
+  --flake ".?submodules=1#${configured_host}"
 
 log "Bootstrap complete"
 printf '%s\n' \

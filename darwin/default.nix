@@ -19,7 +19,9 @@
       "1password-cli"
       "claude-code"
       "ngrok"
+      "typescript-vim"
       "vagrant"
+      "vim-polyglot"
       "vscode"
     ];
 

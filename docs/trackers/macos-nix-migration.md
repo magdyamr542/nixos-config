@@ -12,7 +12,7 @@ macOS differences:
 
 - [x] Rename the generic host file and generate Darwin configurations through
   an explicit host mapping and constructor.
-- [ ] Use the same pinned Neovim submodule and Nix-managed plugin module as the
+- [x] Use the same pinned Neovim submodule and Nix-managed plugin module as the
   Linux repository.
 - [ ] Align the Makefile and bootstrap interfaces while retaining macOS-specific
   host detection, Nix installation, and nix-darwin activation.
@@ -130,20 +130,13 @@ type -a delta
 
 ## Neovim
 
-- [ ] Inventory all 22 modules loaded by `init.lua`, including plugins,
-  language servers, formatters, and Mason-installed tools.
-- [x] Choose a native approach: mirror `../nixos-config/home-manager/neovim.nix`
-  and fetch the config from its own GitHub repo
-  (`magdyamr542/nvim`, pinned via `pkgs.fetchFromGitHub`) with
-  `xdg.configFile.nvim`, instead of committing a local copy of `init.lua`
-  into this repo. Plugins stay packer/Mason-managed, same as on the
-  reference Linux config; only `packer-nvim` itself needs to be declared
-  via `programs.neovim.plugins` so `packadd packer.nvim` works.
-- [x] Migrate `home/programs/default.nix` to the fetched config and remove
-  `dotfiles/nvim/init.lua`. Verified the fetched `init.lua` at the pinned
-  commit is byte-identical to the previously imported copy.
-- [ ] Apply the new generation and confirm Neovim starts, packer bootstraps,
-  and Mason-installed LSPs still work before considering this done.
+- [x] Pin `magdyamr542/nvim` as the same Git submodule revision used by the
+  Linux repository.
+- [x] Move Neovim into `home/programs/neovim.nix` and install its plugins and
+  supporting tools through Nix instead of Packer or Mason.
+- [x] Make every flake reference include submodule content.
+- [ ] Apply the new generation and confirm Neovim starts, plugins load, and
+  required language tooling remains available.
 
 ## GUI applications and cleanup
 
