@@ -50,7 +50,7 @@ architecture, user, and optional password-hash requirement before checking,
 building, and switching the complete generation.
 
 The nixbox path is intentionally host-specific. Vagrant provides an 80 GB
-primary disk, upgrades the base image from NixOS 24.05 to 25.11, and selects a
+primary disk, upgrades the base image from NixOS 24.05 to 26.05, and selects a
 VMSVGA graphics controller. The NixOS host module uses BIOS GRUB, VirtualBox
 guest support, automatic root partition/filesystem growth, and a stable device
 path instead of the box instance's changing filesystem UUID. It does not
@@ -109,8 +109,8 @@ make the later merge smaller and less ambiguous.
 
 ### 1. Align shared input policy
 
-- Choose one nixpkgs/Home Manager release supported by both platforms. Linux
-  currently pins 25.11 while macOS pins 26.05.
+- [x] Upgrade Linux to the 26.05 nixpkgs and Home Manager release used by
+  macOS.
 - Keep nix-darwin as a Darwin-only input and expose formatters for every
   supported Linux and Darwin architecture.
 - Decide whether input updates remain global or can be tested per platform

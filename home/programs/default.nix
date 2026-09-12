@@ -7,28 +7,26 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
-      github = {
-        host = "github.com";
-        addKeysToAgent = "yes";
-        identityFile = "~/.ssh/github";
+    settings = {
+      "github.com" = {
+        AddKeysToAgent = "yes";
+        IdentityFile = "~/.ssh/github";
       };
-      gitlab-tu-dortmund = {
-        host = "ls14-scm.cs.tu-dortmund.de";
-        addKeysToAgent = "yes";
-        identityFile = "~/.ssh/gitlab_tu_dortmund";
+      "ls14-scm.cs.tu-dortmund.de" = {
+        AddKeysToAgent = "yes";
+        IdentityFile = "~/.ssh/gitlab_tu_dortmund";
       };
       "*" = {
-        forwardAgent = false;
-        addKeysToAgent = "no";
-        compression = false;
-        serverAliveInterval = 0;
-        serverAliveCountMax = 3;
-        hashKnownHosts = false;
-        userKnownHostsFile = "~/.ssh/known_hosts";
-        controlMaster = "no";
-        controlPath = "~/.ssh/master-%r@%n:%p";
-        controlPersist = "no";
+        ForwardAgent = false;
+        AddKeysToAgent = "no";
+        Compression = false;
+        ServerAliveInterval = 0;
+        ServerAliveCountMax = 3;
+        HashKnownHosts = false;
+        UserKnownHostsFile = "~/.ssh/known_hosts";
+        ControlMaster = "no";
+        ControlPath = "~/.ssh/master-%r@%n:%p";
+        ControlPersist = "no";
       };
     };
   };

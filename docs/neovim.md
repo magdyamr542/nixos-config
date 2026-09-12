@@ -42,10 +42,14 @@ these plugins don't tag releases.
 
 Where those versions come from:
 
-- **Everything except `nvim-yati`**: pinned transitively through `flake.lock`'s `nixpkgs` input. `pkgs.vimPlugins.<name>` is nixpkgs' own snapshot of that
-  plugin, updated by nixpkgs' automated bot independently of upstream's default branch. The version only moves when this repo's `nixpkgs` input moves.
-- **`nvim-yati`**: not packaged in nixpkgs, so it's pinned directly in `neovim.nix` via an explicit `rev`/`hash` passed to `fetchFromGitHub`. It
-  only moves when that `rev` is edited by hand.
+- **Most plugins**: pinned transitively through `flake.lock`'s `nixpkgs` input.
+  `pkgs.vimPlugins.<name>` is nixpkgs' snapshot of each plugin, so versions move
+  only when the repository's nixpkgs input moves.
+- **`nvim-treesitter` and `playground`**: pinned directly to the compatible
+  legacy revisions required by the current Lua configuration. The 26.05
+  nixpkgs snapshot archives `playground` and follows a newer treesitter API.
+- **`nvim-yati`**: not packaged in nixpkgs, so it is also pinned directly in
+  `neovim.nix` with an explicit revision and fixed-output hash.
 
 ## Upgrading plugins
 
@@ -57,7 +61,9 @@ make update      # nix flake update + make check
 make apply
 ```
 
-**`nvim-yati`** specifically, since it's hand-pinned:
+**Directly pinned plugins** (`nvim-treesitter`, `playground`, and `nvim-yati`)
+must be updated by editing their revision and hash in `home/programs/neovim.nix`.
+For example:
 
 ```sh
 git ls-remote https://github.com/yioneko/nvim-yati HEAD   # get the latest commit

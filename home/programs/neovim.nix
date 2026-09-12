@@ -13,6 +13,32 @@
 let
   nvimConfigDir = ./nvim-config;
 
+  # The Lua configuration still uses the legacy nvim-treesitter API and its
+  # archived playground extension. Pin compatible revisions until the shared
+  # configuration is migrated to the newer treesitter API.
+  nvim-treesitter = pkgs.vimUtils.buildVimPlugin {
+    pname = "nvim-treesitter";
+    version = "2025-05-24";
+    src = pkgs.fetchFromGitHub {
+      owner = "nvim-treesitter";
+      repo = "nvim-treesitter";
+      rev = "42fc28ba918343ebfd5565147a42a26580579482";
+      sha256 = "1ck1qslxwi18qxrga68blvk1dg9j4jn65xiw8snq5pk06waksnq9";
+    };
+  };
+
+  playground = pkgs.vimUtils.buildVimPlugin {
+    pname = "playground";
+    version = "2023-09-15";
+    dependencies = [ nvim-treesitter ];
+    src = pkgs.fetchFromGitHub {
+      owner = "nvim-treesitter";
+      repo = "playground";
+      rev = "ba48c6a62a280eefb7c85725b0915e021a1a0749";
+      sha256 = "1vgj5vc32ly15ni62fk51yd8km2zp3fkzx0622x5cv9pavmjpr40";
+    };
+  };
+
   nvim-yati = pkgs.vimUtils.buildVimPlugin {
     pname = "nvim-yati";
     version = "unstable-2024";
@@ -33,10 +59,12 @@ in
     enable = true;
     viAlias = true;
     vimAlias = true;
+    withPython3 = true;
+    withRuby = true;
 
     plugins = with pkgs.vimPlugins; [
       vscode-nvim
-      auto-pairs
+      nvim-autopairs
       vim-code-dark
       ayu-vim
       popup-nvim

@@ -21,7 +21,7 @@ in
     fd
     google-chrome
     kubectl
-    neofetch
+    fastfetch
     powerline
     vagrant
     vokoscreen-ng
@@ -49,7 +49,7 @@ in
     nodejs
     imagemagick
     yq
-    nixfmt-rfc-style
+    nixfmt
     maim
     file
     vlc

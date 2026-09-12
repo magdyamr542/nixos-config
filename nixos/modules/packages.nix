@@ -18,6 +18,7 @@
     pdfgrep
     tree
     bumblebee-status
+    brightnessctl
     xsel
     bc
     zip

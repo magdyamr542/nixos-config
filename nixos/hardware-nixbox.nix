@@ -2,7 +2,7 @@
 { lib, ... }:
 
 {
-  # Avoid the shrunk-modules initrd bug in the pinned NixOS 25.11 revision.
+  # Keep the explicit module set that avoids the nixbox shrunk-initrd failure.
   boot.initrd.includeDefaultModules = false;
 
   boot.initrd.availableKernelModules = [

@@ -2,11 +2,11 @@
 
 # increase or decrease brightness by 10%
 if [ "$1" == "up" ]; then
-  light -A 5
+  brightnessctl --quiet set +5%
 elif [ "$1" == "down" ]; then
-  light -U 5 
+  brightnessctl --quiet set 5%-
 fi
 
 # show a notification with the new brightness level
-brightness=$(light -G)
-notify-send -t 1500  "Brightness: $brightness%"
+brightness=$(brightnessctl --machine-readable info | cut -d, -f4)
+notify-send -t 1500 "Brightness: $brightness"

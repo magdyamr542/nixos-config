@@ -14,24 +14,24 @@ Vagrant.configure("2") do |config|
     virtualbox.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
   end
 
-  # Upgrade NixOS from 24.05 to 25.11 on first boot
+  # Upgrade NixOS from 24.05 to 26.05 on first boot
   config.vm.provision "shell", inline: <<-SHELL
     # Check current NixOS version
     current_version=$(nixos-version | cut -d'.' -f1,2)
 
-    if [ "$current_version" != "25.11" ]; then
-      echo "Upgrading NixOS from $current_version to 25.11..."
+    if [ "$current_version" != "26.05" ]; then
+      echo "Upgrading NixOS from $current_version to 26.05..."
 
-      # Update to 25.11 channel
-      sudo nix-channel --add https://nixos.org/channels/nixos-25.11 nixos
+      # Update to 26.05 channel
+      sudo nix-channel --add https://nixos.org/channels/nixos-26.05 nixos
       sudo nix-channel --update
 
       # Rebuild with new channel
       sudo nixos-rebuild switch --upgrade
 
-      echo "NixOS upgraded to 25.11. Please run 'vagrant reload' to complete the upgrade."
+      echo "NixOS upgraded to 26.05. Please run 'vagrant reload' to complete the upgrade."
     else
-      echo "Already running NixOS 25.11"
+      echo "Already running NixOS 26.05"
     fi
   SHELL
 end
