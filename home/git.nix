@@ -1,19 +1,33 @@
-{ host, ... }:
+{
+  host,
+  lib,
+  ...
+}:
 
 {
   programs.git = {
     enable = true;
     lfs.enable = true;
-    settings = {
-      user = {
-        name = host.fullName;
-        email = host.email;
-      };
-      column.ui = "auto";
-      init.defaultBranch = "main";
-      merge.conflictStyle = "diff3";
-      diff.colorMoved = "default";
-    };
+    settings = [
+      (
+        {
+          column.ui = "auto";
+          init.defaultBranch = "main";
+          merge.conflictStyle = "diff3";
+          diff.colorMoved = "default";
+        }
+        // lib.optionalAttrs (host.fullName != "" || host.email != "") {
+          user =
+            lib.optionalAttrs (host.fullName != "") {
+              name = host.fullName;
+            }
+            // lib.optionalAttrs (host.email != "") {
+              email = host.email;
+            };
+        }
+        // (host.gitSettings or { })
+      )
+    ];
   };
 
   programs.delta = {

@@ -3,12 +3,11 @@
 {
   imports = [
     ./packages.nix
-    ./git.nix
     ./gui-apps.nix
     ./shell.nix
-    ./programs.nix
+    ../git.nix
     ../tmux.nix
-    ../programs/neovim.nix
+    ../programs
   ];
 
   home = {
