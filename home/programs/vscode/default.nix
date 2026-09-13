@@ -76,6 +76,7 @@ in
         extensions.amrmetwally.rust-mod-opener
         extensions.amrmetwally.add-arround
         extensions.yy0931.go-to-next-error
+        extensions.bbenoist.nix
       ];
 
       keybindings = [
