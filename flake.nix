@@ -21,11 +21,23 @@
     }@inputs:
     let
       inherit (self) outputs;
+      # Evaluate each host record against hosts/options.nix so a missing or
+      # misspelled field, or a value of the wrong shape, fails here with a
+      # precise error instead of surfacing later inside nixos/, darwin/, or
+      # home/.
+      mkHost =
+        hostFile:
+        (nixpkgs.lib.evalModules {
+          modules = [
+            ./hosts/options.nix
+            hostFile
+          ];
+        }).config;
       nixosHosts = {
-        amr = import ./hosts/amr.nix;
-        nixbox = import ./hosts/nixbox.nix;
+        amr = mkHost ./hosts/amr.nix;
+        nixbox = mkHost ./hosts/nixbox.nix;
       };
-      macosHost = import ./hosts/macos.nix;
+      macosHost = mkHost ./hosts/macos.nix;
       darwinHosts = {
         ${macosHost.hostname} = macosHost;
       };

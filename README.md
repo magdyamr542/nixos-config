@@ -8,7 +8,7 @@ configuration, and Home Manager provides the shared user environment.
 | Concern                            | Owner               | Location                      |
 | ---------------------------------- | ------------------- | ----------------------------- |
 | Inputs and host outputs            | Nix flake           | `flake.nix`, `flake.lock`     |
-| Host identity and module selection | Host records        | `hosts/`                      |
+| Host identity and module selection | Typed host records  | `hosts/` (schema in `hosts/options.nix`) |
 | Linux system and hardware          | NixOS               | `nixos/`                      |
 | macOS system preferences           | nix-darwin          | `darwin/`                     |
 | Shared user programs and dotfiles  | Home Manager        | `home/`, `dotfiles/`          |
@@ -28,6 +28,20 @@ Available configurations:
 
 Review the matching file in `hosts/` before applying a configuration to a different machine. `system.stateVersion` and `home.stateVersion` are
 compatibility markers, not package versions; do not routinely change them.
+
+### Typed host records
+
+Each file in `hosts/` (`amr.nix`, `nixbox.nix`, `macos.nix`) is a plain attribute set of values such as `username`, `sshSettings`, and `extraGroups`.
+`flake.nix` evaluates every host file against the schema in `hosts/options.nix` via `lib.evalModules` before building any configuration. That schema
+declares each field's type, default, and purpose, so:
+
+- A misspelled or unknown field (e.g. `extraGropus`) fails immediately with an error naming the file and the bad option, instead of surfacing later as a
+  missing-attribute error deep inside `nixos/`, `darwin/`, or `home/`.
+- A value of the wrong shape (a string where a list is expected, and so on) is rejected the same way.
+- `hosts/options.nix` is the single place that documents which fields a host record may set, which are required, and what each one is for — read it
+  before adding a new field or a new host.
+
+Add a field by declaring it once in `hosts/options.nix`; every host file can then set it and gets the same type checking.
 
 ## Daily workflow
 
