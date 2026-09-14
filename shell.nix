@@ -26,5 +26,13 @@ pkgs.mkShell {
   packages = [
     claude
     codex
+    pkgs.vagrant
   ];
+
+  shellHook = ''
+    if ! vagrant plugin list 2>/dev/null | grep -q '^vagrant-disksize'; then
+      echo "Installing vagrant-disksize plugin..."
+      vagrant plugin install vagrant-disksize
+    fi
+  '';
 }
