@@ -192,12 +192,11 @@ bar {
 # Suspend the system
 bindsym $mod+Control+s exec --no-startup-id $i3lock_command && systemctl suspend
 
-# Control brithness
-bindsym XF86MonBrightnessUp exec --no-startup-id $HOME/.scripts/i3/update-brithness.sh up
-bindsym XF86MonBrightnessDown exec --no-startup-id $HOME/.scripts/i3/update-brithness.sh down
+# Control brightness
+bindsym XF86MonBrightnessUp exec --no-startup-id $HOME/.scripts/i3/update-brightness.sh up
+bindsym XF86MonBrightnessDown exec --no-startup-id $HOME/.scripts/i3/update-brightness.sh down
 
 # Starup
 exec --no-startup-id nm-applet #show wifi applet
 exec --no-startup-id feh --bg-scale --zoom fill ~/.wallpaper.png # set wallpaper. image in the config. a symlink needs to be created for it
 exec --no-startup-id picom -CGb
-

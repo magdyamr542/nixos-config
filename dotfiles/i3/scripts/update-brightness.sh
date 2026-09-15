@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# increase or decrease brightness by 10%
+# Increase or decrease brightness by 2%.
 if [ "$1" == "up" ]; then
-  brightnessctl --quiet set +5%
+  brightnessctl --quiet set +2%
 elif [ "$1" == "down" ]; then
-  brightnessctl --quiet set 5%-
+  brightnessctl --quiet set 2%-
 fi
 
 # show a notification with the new brightness level

@@ -40,24 +40,6 @@
 
   programs.dconf.enable = true;
 
-  # Handle laptop brightness keys independently of the graphical session.
-  # This preserves the behavior previously provided by programs.light.
-  services.actkbd = {
-    enable = true;
-    bindings = [
-      {
-        keys = [ 224 ];
-        events = [ "key" ];
-        command = "${pkgs.brightnessctl}/bin/brightnessctl set 5%-";
-      }
-      {
-        keys = [ 225 ];
-        events = [ "key" ];
-        command = "${pkgs.brightnessctl}/bin/brightnessctl set +5%";
-      }
-    ];
-  };
-
   programs.obs-studio = {
     enable = true;
     plugins = with pkgs.obs-studio-plugins; [
