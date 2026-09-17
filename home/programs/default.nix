@@ -1,7 +1,10 @@
-{ host, lib, ... }:
+{ host, ... }:
 
 {
-  imports = [ ./neovim.nix ] ++ lib.optionals (lib.hasSuffix "-linux" host.system) [ ./vscode ];
+  imports = [
+    ./neovim.nix
+    ./vscode
+  ];
 
   programs.ssh = {
     enable = true;

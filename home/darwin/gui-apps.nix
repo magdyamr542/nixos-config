@@ -16,6 +16,5 @@
     nerd-fonts.hack
     ngrok
     vagrant
-    vscode
   ];
 }

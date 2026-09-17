@@ -19,6 +19,7 @@
     libpq
     mirrord
     nmap
+    nixfmt
     pgbouncer
     protobuf
     python311

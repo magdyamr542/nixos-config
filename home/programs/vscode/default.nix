@@ -11,7 +11,6 @@ in
       extensions = [
         pkgs.vscode-extensions.vscodevim.vim
         pkgs.vscode-extensions.golang.go
-        pkgs.vscode-extensions.ms-python.vscode-pylance
         pkgs.vscode-extensions.esbenp.prettier-vscode
         pkgs.vscode-extensions.dbaeumer.vscode-eslint
         pkgs.vscode-extensions.hashicorp.terraform
@@ -24,7 +23,6 @@ in
         pkgs.vscode-extensions.pkief.material-icon-theme
         pkgs.vscode-extensions.github.vscode-pull-request-github
         pkgs.vscode-extensions.ms-python.isort
-        pkgs.vscode-extensions.ms-vscode-remote.remote-ssh
         pkgs.vscode-extensions.ecmel.vscode-html-css
         pkgs.vscode-extensions.formulahendry.auto-rename-tag
         pkgs.vscode-extensions.vscode-icons-team.vscode-icons
@@ -51,7 +49,7 @@ in
         pkgs.vscode-extensions.foxundermoon.shell-format
         pkgs.vscode-extensions.irongeek.vscode-env
         pkgs.vscode-extensions.stkb.rewrap
-        pkgs.vscode-extensions.bbenoist.nix
+        pkgs.vscode-extensions.jnoortheen.nix-ide
         pkgs.vscode-extensions.zxh404.vscode-proto3
         pkgs.vscode-extensions.rust-lang.rust-analyzer
       ]
@@ -76,7 +74,6 @@ in
         extensions.amrmetwally.rust-mod-opener
         extensions.amrmetwally.add-arround
         extensions.yy0931.go-to-next-error
-        extensions.bbenoist.nix
       ];
 
       keybindings = [
