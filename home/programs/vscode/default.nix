@@ -1,6 +1,7 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   extensions = import ./extensions.nix { inherit pkgs; };
+  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
 in
 {
   programs.vscode = {
@@ -125,11 +126,6 @@ in
           when = "textInputFocus";
         }
         {
-          key = "shift+cmd+left";
-          command = "-cursorHomeSelect";
-          when = "textInputFocus";
-        }
-        {
           key = "shift+alt+right";
           command = "cursorWordRightSelect";
         }
@@ -246,6 +242,132 @@ in
           key = "ctrl+.";
           command = "-editor.changePasteType";
           when = "pasteWidgetVisible";
+        }
+      ]
+      ++ lib.optionals isDarwin [
+        {
+          key = "shift+cmd+left";
+          command = "-cursorHomeSelect";
+          when = "textInputFocus";
+        }
+        {
+          key = "ctrl+s";
+          command = "workbench.action.files.save";
+        }
+        {
+          key = "ctrl+p";
+          command = "workbench.action.quickOpen";
+        }
+        {
+          key = "ctrl+b";
+          command = "workbench.action.toggleSidebarVisibility";
+        }
+        {
+          key = "ctrl+w";
+          command = "-workbench.action.switchWindow";
+        }
+        {
+          key = "ctrl+w";
+          command = "workbench.action.closeActiveEditor";
+        }
+        {
+          key = "ctrl+shift+p";
+          command = "workbench.action.showCommands";
+        }
+        {
+          key = "ctrl+shift+f";
+          command = "workbench.action.findInFiles";
+        }
+        {
+          key = "ctrl+k ctrl+c";
+          command = "editor.action.addCommentLine";
+          when = "editorTextFocus && !editorReadonly";
+        }
+        {
+          key = "ctrl+k ctrl+u";
+          command = "editor.action.removeCommentLine";
+          when = "editorTextFocus && !editorReadonly";
+        }
+        {
+          key = "ctrl+f";
+          command = "actions.find";
+          when = "editorFocus || editorIsOpen";
+        }
+        {
+          key = "shift+ctrl+space";
+          command = "editor.action.triggerParameterHints";
+          when = "editorHasSignatureHelpProvider && editorTextFocus";
+        }
+        {
+          key = "cmd+t";
+          command = "workbench.action.terminal.focus";
+        }
+        {
+          key = "cmd+t";
+          command = "workbench.action.focusActiveEditorGroup";
+          when = "terminalFocus";
+        }
+        {
+          key = "cmd+1";
+          command = "workbench.action.openEditorAtIndex1";
+        }
+        {
+          key = "cmd+2";
+          command = "workbench.action.openEditorAtIndex2";
+        }
+        {
+          key = "cmd+3";
+          command = "workbench.action.openEditorAtIndex3";
+        }
+        {
+          key = "cmd+4";
+          command = "workbench.action.openEditorAtIndex4";
+        }
+        {
+          key = "cmd+5";
+          command = "workbench.action.openEditorAtIndex5";
+        }
+        {
+          key = "cmd+6";
+          command = "workbench.action.openEditorAtIndex6";
+        }
+        {
+          key = "cmd+k cmd+w";
+          command = "-workbench.action.closeAllEditors";
+        }
+        {
+          key = "cmd+k cmd+w";
+          command = "workbench.action.closeOtherEditors";
+        }
+        {
+          key = "shift+cmd+b";
+          command = "-workbench.action.tasks.build";
+          when = "taskCommandsRegistered";
+        }
+        {
+          key = "shift+cmd+b";
+          command = "workbench.action.toggleSidebarVisibility";
+          when = "viewContainer.workbench.view.explorer.enabled";
+        }
+        {
+          key = "shift+cmd+r";
+          command = "editor.action.rename";
+          when = "editorHasRenameProvider && editorTextFocus && !editorReadonly";
+        }
+        {
+          key = "cmd+l";
+          command = "workbench.action.navigateRight";
+          when = "editorFocus";
+        }
+        {
+          key = "alt+cmd+l";
+          command = "editor.action.selectHighlights";
+          when = "editorFocus";
+        }
+        {
+          key = "shift+cmd+l";
+          command = "-editor.action.selectHighlights";
+          when = "editorFocus";
         }
       ];
 
