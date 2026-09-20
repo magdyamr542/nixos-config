@@ -16,6 +16,7 @@ in
     diffutils
     fd
     google-chrome
+    evince
     kubectl
     fastfetch
     powerline
