@@ -94,15 +94,13 @@ configured_user="$(
 [[ "${configured_user}" == "$(id -un)" ]] || die \
   "host ${configured_host} selects user ${configured_user}, but you are $(id -un)"
 
-password_hash_file="$(
+sops_key_file="$(
   "${nix_cmd[@]}" eval --raw \
-    "${FLAKE_REF}#nixosConfigurations.${configured_host}.config.users.users.${configured_user}.hashedPasswordFile" \
+    "${FLAKE_REF}#nixosConfigurations.${configured_host}.config.sops.age.keyFile" \
     --apply 'value: if value == null then "" else toString value'
 )"
-if [[ -n "${password_hash_file}" ]]; then
-  if ! sudo test -s "${password_hash_file}"; then
-    die "missing or empty password hash: ${password_hash_file}"
-  fi
+if [[ -n "${sops_key_file}" && ! -s "${sops_key_file}" ]]; then
+  die "missing sops age key: ${sops_key_file} (restore keys.txt from the password manager, see README)"
 fi
 
 log "Validating configuration ${configured_host}"

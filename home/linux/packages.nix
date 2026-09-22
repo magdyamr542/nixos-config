@@ -12,6 +12,8 @@ in
     arandr
     unzip
     wget
+    age
+    sops
     bat
     diffutils
     fd

@@ -2,6 +2,24 @@
 
 set -euo pipefail
 
+mapfile -d '' secret_files < <(
+  git diff --cached --name-only --diff-filter=ACMR -z -- 'secrets/*'
+)
+
+plaintext_secrets=()
+for file in "${secret_files[@]}"; do
+  if ! git show ":${file}" | grep -q '^sops:'; then
+    plaintext_secrets+=("$file")
+  fi
+done
+
+if ((${#plaintext_secrets[@]} > 0)); then
+  echo "Refusing to commit secrets that are not sops-encrypted:" >&2
+  printf '  %s\n' "${plaintext_secrets[@]}" >&2
+  echo "Encrypt them with: sops --encrypt --in-place <file>" >&2
+  exit 1
+fi
+
 mapfile -d '' nix_files < <(
   git diff --cached --name-only --diff-filter=ACMR -z -- '*.nix'
 )

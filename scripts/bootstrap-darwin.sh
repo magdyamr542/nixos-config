@@ -101,6 +101,15 @@ configured_user="$(
 [[ "${configured_user}" == "$(id -un)" ]] || die \
   "host ${configured_host} selects user ${configured_user}, but you are $(id -un)"
 
+sops_key_file="$(
+  "${nix_cmd[@]}" eval --raw \
+    "${FLAKE_REF}#darwinConfigurations.${configured_host}.config.home-manager.users.${configured_user}.sops.age.keyFile" \
+    --apply 'value: if value == null then "" else toString value'
+)"
+if [[ -n "${sops_key_file}" && ! -s "${sops_key_file}" ]]; then
+  die "missing sops age key: ${sops_key_file} (restore keys.txt from the password manager, see README)"
+fi
+
 log "Validating configuration ${configured_host}"
 "${nix_cmd[@]}" flake check "${FLAKE_REF}" --all-systems
 "${nix_cmd[@]}" eval --raw \

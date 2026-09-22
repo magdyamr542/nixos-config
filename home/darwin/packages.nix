@@ -3,6 +3,7 @@
 {
   # Add or remove user-level CLI packages here, then run `make apply`.
   home.packages = with pkgs; [
+    age
     awscli2
     bat
     bitwarden-cli
@@ -25,6 +26,7 @@
     python311
     rename
     ripgrep
+    sops
     tenv
     tesseract
     tflint

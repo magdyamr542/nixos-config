@@ -2,7 +2,7 @@
   pkgs ?
     import
       (builtins.fetchTarball {
-        url = "https://github.com/NixOS/nixpkgs/archive/ad37ffa4485bd9d85ef09beb0cbc7c9b09459a98.tar.gz";
+        url = "https://github.com/NixOS/nixpkgs/archive/ece1ef61e70aeb885f17a1609e09739907453bab.tar.gz";
       })
       {
         config.allowUnfree = true;
@@ -27,6 +27,8 @@ pkgs.mkShell {
     claude
     codex
     pkgs.vagrant
+    pkgs.age
+    pkgs.sops
   ];
 
   shellHook = ''

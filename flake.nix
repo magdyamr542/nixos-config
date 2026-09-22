@@ -9,6 +9,9 @@
 
     nix-darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -17,6 +20,7 @@
       nixpkgs,
       home-manager,
       nix-darwin,
+      sops-nix,
       ...
     }@inputs:
     let
@@ -59,7 +63,9 @@
           modules = [
             ./nixos
             host.nixosModule
+            sops-nix.nixosModules.sops
             home-manager.nixosModules.home-manager
+            { home-manager.sharedModules = [ sops-nix.homeManagerModules.sops ]; }
           ];
         };
       mkDarwinConfiguration =
@@ -69,6 +75,7 @@
           modules = [
             host.darwinModule
             home-manager.darwinModules.home-manager
+            { home-manager.sharedModules = [ sops-nix.homeManagerModules.sops ]; }
           ];
         };
     in

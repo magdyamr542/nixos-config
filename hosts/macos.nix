@@ -20,6 +20,8 @@
     url."git@github.com:enercity".insteadOf = "https://github.com/enercity";
   };
 
+  sopsFile = ../secrets/secrets.yaml;
+
   sshSettings = {
     "github.com" = {
       AddKeysToAgent = "yes";

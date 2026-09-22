@@ -14,6 +14,7 @@ configuration, and Home Manager provides the shared user environment.
 | Shared user programs and dotfiles  | Home Manager        | `home/`, `dotfiles/`          |
 | Platform-specific user behavior    | Home Manager        | `home/linux/`, `home/darwin/` |
 | Locally packaged programs          | nixpkgs derivations | `packages/`                   |
+| Encrypted secrets                  | sops-nix            | `secrets/`, `.sops.yaml`      |
 
 All hosts use the same pinned nixpkgs and Home Manager revisions. Home Manager is integrated into each system generation, so a separate
 `home-manager switch` is neither required nor expected.
@@ -87,25 +88,13 @@ cd ~/nixos-config
 $EDITOR hosts/amr.nix
 ```
 
-The physical host expects an external yescrypt password hash:
-
-```sh
-sudo install -d -m 0700 /etc/nixos/secrets
-password_hash="$(nix shell nixpkgs#mkpasswd -c mkpasswd -m yescrypt)"
-printf '%s\n' "$password_hash" |
-  sudo tee /etc/nixos/secrets/amr-password-hash >/dev/null
-unset password_hash
-sudo chown root:root /etc/nixos/secrets/amr-password-hash
-sudo chmod 0600 /etc/nixos/secrets/amr-password-hash
-```
-
-Then validate, build, and activate:
+Restore the sops age key (see [Secrets](#secrets)), then validate, build, and activate:
 
 ```sh
 ./scripts/bootstrap.sh --host amr
 ```
 
-The Linux bootstrap verifies the operating system, architecture, selected hostname, user, and required password-hash file before switching.
+The Linux bootstrap verifies the operating system, architecture, selected hostname, user, and required sops age key before switching.
 
 ### Testing with nixbox
 
@@ -128,7 +117,7 @@ vagrant reload
 vagrant ssh
 ```
 
-The nixbox configuration preserves Vagrant's managed login key and does not require the workstation password-hash file.
+The nixbox configuration preserves Vagrant's managed login key and does not use sops secrets.
 
 ## Fresh macOS installation
 
@@ -138,7 +127,7 @@ Install Apple's Command Line Tools first if Git is unavailable:
 xcode-select --install
 ```
 
-Then clone, review the Mac host record, and bootstrap:
+Then clone, review the Mac host record, restore the sops age key (see [Secrets](#secrets)), and bootstrap:
 
 ```sh
 git clone --recurse-submodules \
@@ -177,10 +166,36 @@ nix run nixpkgs#cowsay -- "hello"
 Prefer native Home Manager options. Keep plain files under `dotfiles/` only when no useful module exists. Managed files are symlinks into the immutable
 Nix store, so edit their repository sources and apply a new generation.
 
-## Secrets and SSH keys
+## Secrets
 
-Never commit passwords, password hashes, tokens, or private keys. Public SSH keys may be tracked under `dotfiles/ssh/`; private keys must be installed
-directly on the target machine with mode `0600`.
+Passwords, password hashes, and tokens live encrypted in `secrets/secrets.yaml`. They are managed with [sops-nix](https://github.com/Mic92/sops-nix)
+and decrypted at activation time, never into the Nix store. A single personal age key encrypts everything. It is backed up in the password manager and
+must exist at `~/.config/sops/age/keys.txt` on every machine that uses sops (`amr` and the Mac; nixbox does not). NixOS reads the same file as root for
+system secrets such as the user's password hash.
+
+Restore the key on a new machine:
+
+```sh
+mkdir -p ~/.config/sops/age
+$EDITOR ~/.config/sops/age/keys.txt   # paste from the password manager
+chmod 600 ~/.config/sops/age/keys.txt
+```
+
+Edit secrets (the file is decrypted in the editor and re-encrypted on save):
+
+```sh
+sops secrets/secrets.yaml
+nix shell nixpkgs#mkpasswd -c mkpasswd -m yescrypt   # value for amr-password-hash
+```
+
+Use a secret in Home Manager with `sops.secrets."<name>" = { };` and reference `config.sops.secrets."<name>".path`. System secrets use the same
+option in a NixOS module. Key names are visible in the public repository; only values are encrypted. Flakes only see tracked files, so `git add` a new
+secrets file before building. The pre-commit hook rejects files under `secrets/` that are not sops-encrypted.
+
+## SSH keys
+
+Never commit private keys. Public SSH keys may be tracked under `dotfiles/ssh/`; private keys must be installed directly on the target machine with mode
+`0600`.
 
 The current host records refer to these optional private keys:
 
@@ -230,7 +245,7 @@ git commit
 git push
 ```
 
-The optional pre-commit hook formats staged Nix files:
+The optional pre-commit hook formats staged Nix files and rejects unencrypted secrets:
 
 ```sh
 git config core.hooksPath .githooks
@@ -251,12 +266,14 @@ state, or secrets.
 ├── home/
 │   ├── default.nix               shared Home Manager entry point
 │   ├── git.nix                   shared Git and Delta configuration
+│   ├── secrets.nix               shared sops-nix setup for user secrets
 │   ├── tmux.nix                  shared tmux configuration
 │   ├── programs/                 shared SSH, Neovim, and Linux-only VS Code
 │   ├── linux/                    Linux packages, shell, and desktop
 │   └── darwin/                   macOS packages, shell, and GUI apps
 ├── dotfiles/                     repository-managed plain files
 ├── packages/                     local package derivations
+├── secrets/                      sops-encrypted secrets (see .sops.yaml)
 ├── scripts/
 │   ├── bootstrap.sh              platform-dispatching entry point
 │   ├── bootstrap-linux.sh

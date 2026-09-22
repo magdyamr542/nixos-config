@@ -4,4 +4,6 @@ result-*
 dotfiles/ssh/*
 !dotfiles/ssh/*.pub
 .envrc
+keys.txt
+*.agekey
 .direnv

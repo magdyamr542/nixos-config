@@ -81,15 +81,26 @@
       description = "Public SSH keys authorized for the user's account. NixOS hosts only.";
     };
 
-    passwordHashFile = lib.mkOption {
+    sopsFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        sops-encrypted secrets file read by both the system (NixOS) and Home
+        Manager, or null to disable sops on this host. Decryption uses the age
+        key at ~/.config/sops/age/keys.txt on the target machine.
+      '';
+      example = lib.literalExpression "../secrets/secrets.yaml";
+    };
+
+    passwordHashSecret = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
-        Absolute path on the target machine to a file containing a hashed
-        password for the user, or null to leave the account without one
-        (e.g. when another mechanism, like Vagrant, manages login). NixOS
-        hosts only.
+        Name of the secret in `sopsFile` holding the user's yescrypt password
+        hash, or null to leave the account without one (e.g. when another
+        mechanism, like Vagrant, manages login). NixOS hosts only.
       '';
+      example = "amr-password-hash";
     };
 
     homeModule = lib.mkOption {

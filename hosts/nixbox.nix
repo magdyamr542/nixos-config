@@ -32,7 +32,6 @@
     "networkmanager"
     "audio"
   ];
-  passwordHashFile = null;
   # Vagrant owns ~/.ssh/authorized_keys and may replace its insecure default key.
   authorizedKeys = [ ];
 }

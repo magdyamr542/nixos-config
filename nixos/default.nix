@@ -14,6 +14,7 @@
     ./modules/desktop.nix
     ./modules/networking.nix
     ./modules/packages.nix
+    ./modules/secrets.nix
     ./modules/security.nix
   ];
 
@@ -72,9 +73,6 @@
       useDefaultShell = true;
       openssh.authorizedKeys.keys = host.authorizedKeys;
       isNormalUser = true;
-    }
-    // lib.optionalAttrs (host.passwordHashFile != null) {
-      hashedPasswordFile = host.passwordHashFile;
     };
   };
 

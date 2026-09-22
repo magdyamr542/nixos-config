@@ -4,6 +4,7 @@
   imports = [
     host.homeModule
     ./git.nix
+    ./secrets.nix
     ./tmux.nix
     ./programs
   ];
