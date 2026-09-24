@@ -103,8 +103,8 @@ in
   "amrmetwally"."vim-find-highlight" = vscode-utils.extensionFromVscodeMarketplace {
     name = "vim-find-highlight";
     publisher = "amrmetwally";
-    version = "0.0.10";
-    sha256 = "13lgd1xzyskpvjalbfmldk494q65idjfbfadsn85gm037drgp8wj";
+    version = "0.0.11";
+    sha256 = "sha256-wY49t7Midd/8L3RBJMzrVUtJCFpmcCtS9NkEP06SwTk=";
   };
   "amrmetwally"."rust-mod-opener" = vscode-utils.extensionFromVscodeMarketplace {
     name = "rust-mod-opener";
