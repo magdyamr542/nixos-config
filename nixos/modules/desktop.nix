@@ -24,6 +24,7 @@
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
+        autotiling
         dmenu
         i3status
         i3blocks

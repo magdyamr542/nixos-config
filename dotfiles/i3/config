@@ -197,6 +197,7 @@ bindsym XF86MonBrightnessUp exec --no-startup-id $HOME/.scripts/i3/update-bright
 bindsym XF86MonBrightnessDown exec --no-startup-id $HOME/.scripts/i3/update-brightness.sh down
 
 # Starup
+exec --no-startup-id autotiling
 exec --no-startup-id nm-applet #show wifi applet
 exec --no-startup-id feh --bg-scale --zoom fill ~/.wallpaper.png # set wallpaper. image in the config. a symlink needs to be created for it
 exec --no-startup-id picom -CGb
