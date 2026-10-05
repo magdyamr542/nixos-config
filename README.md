@@ -19,6 +19,15 @@ configuration, and Home Manager provides the shared user environment.
 All hosts use the same pinned nixpkgs and Home Manager revisions. Home Manager is integrated into each system generation, so a separate
 `home-manager switch` is neither required nor expected.
 
+## Immich photo system
+
+The `amr` NixOS host also runs a private Immich deployment. Original assets are
+stored in a private Cloudflare R2 bucket through a system-managed rclone mount;
+Immich's database and generated media remain local to the host. Access is
+tailnet-only through Tailscale Serve, not a public HTTP listener. See
+[the Immich architecture guide](docs/immich.md) for the storage, networking,
+service-ordering, and secret-handling design.
+
 Available configurations:
 
 | Output                | Platform         | User           | Purpose                    |

@@ -8,7 +8,7 @@ mapfile -d '' secret_files < <(
 
 plaintext_secrets=()
 for file in "${secret_files[@]}"; do
-  if ! git show ":${file}" | grep -q '^sops:'; then
+  if ! git show ":${file}" | grep -Eq '^sops:|^sops_mac=ENC\['; then
     plaintext_secrets+=("$file")
   fi
 done

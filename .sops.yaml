@@ -3,7 +3,7 @@
 keys:
   - &amr age14f9ldtps5a8pv472rcczfa8qmy68j6ft7krvm6cq96vu6suxc5xqjr0mq8
 creation_rules:
-  - path_regex: ^secrets/.*\.yaml$
+  - path_regex: ^secrets/.*\.(yaml|env)$
     key_groups:
       - age:
           - *amr
