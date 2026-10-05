@@ -12,12 +12,12 @@
   # You can import other NixOS modules here
   imports = [
     ./modules/desktop.nix
-    ./modules/immich.nix
     ./modules/networking.nix
     ./modules/packages.nix
     ./modules/secrets.nix
     ./modules/security.nix
-  ];
+  ]
+  ++ lib.optional host.enableImmich ./modules/immich.nix;
 
   nixpkgs = {
     # You can add overlays here

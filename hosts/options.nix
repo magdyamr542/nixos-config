@@ -114,6 +114,12 @@
       description = "NixOS system module for this host. Set for Linux hosts, left null on macOS.";
     };
 
+    enableImmich = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to enable the local Immich, R2, and Tailscale photo-backup stack on this NixOS host.";
+    };
+
     darwinModule = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;

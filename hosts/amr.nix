@@ -3,6 +3,7 @@
   hostname = "amr";
   system = "x86_64-linux";
   nixosModule = ../nixos/hosts/linux.nix;
+  enableImmich = true;
   homeModule = ../home/linux;
   homeDirectory = "/home/amr";
   stateVersion = "23.05";
