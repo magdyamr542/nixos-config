@@ -69,6 +69,9 @@ in
     kubectx
     sound-theme-freedesktop
     claude-code
+    cloudflare-cli
+    rclone
+    wrangler
     (pkgs.buildEnv {
       name = "my-bash-scripts";
       paths = [ ../../scripts ];
