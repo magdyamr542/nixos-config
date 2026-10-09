@@ -66,6 +66,10 @@ in
     openFirewall = true;
   };
 
+  # Disable centralized client diagnostic logging for this device. This also
+  # disables Tailscale support workflows that require those logs.
+  systemd.services.tailscaled.environment.TS_NO_LOGS_NO_SUPPORT = "true";
+
   # The secret is encrypted in secrets/secrets.yaml and only materialized at
   # runtime. Docker Compose passes it to the two containers as a file-backed
   # Compose secret, never as an environment variable.
